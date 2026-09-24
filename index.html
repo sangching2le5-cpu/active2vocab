@@ -1,0 +1,1809 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>English Vocabulary App — Unit 1–3</title>
+<style>
+:root{
+  --bg:#f3f8fd; --card:#ffffff; --text:#1b2a3a; --muted:#64748b;
+  --primary:#4a90d9; --primary-dark:#3577bd; --primary-soft:#dfeefc; --primary-soft2:#eef6fe;
+  --border:#dbe7f4; --ok:#178a4c; --ok-bg:#e6f7ed; --bad:#c93c3c; --bad-bg:#fdeceb;
+  --warn:#b8860b; --warn-bg:#fdf6e3;
+  --shadow:0 3px 14px rgba(38,86,145,.08);
+}
+[data-theme="dark"]{
+  --bg:#0f1720; --card:#17222e; --text:#e6eef7; --muted:#93a6bb;
+  --primary:#6aa9e9; --primary-dark:#8bbdf0; --primary-soft:#1f3348; --primary-soft2:#1a2a3b;
+  --border:#26374a; --ok:#4bd486; --ok-bg:#13301f; --bad:#ff8585; --bad-bg:#3a1c1c;
+  --warn:#e5b84b; --warn-bg:#332a12;
+  --shadow:0 3px 14px rgba(0,0,0,.4);
+}
+*{box-sizing:border-box}
+html,body{margin:0;padding:0}
+body{
+  font-family:"Segoe UI",system-ui,-apple-system,"Helvetica Neue",Arial,sans-serif;
+  background:var(--bg); color:var(--text); line-height:1.55;
+  -webkit-font-smoothing:antialiased;
+}
+h1{font-size:26px;margin:0 0 4px}
+h2{font-size:19px;margin:26px 0 12px}
+h3{font-size:16px;margin:0 0 8px}
+.sub{color:var(--muted);font-size:14px;margin:0 0 20px}
+a{color:var(--primary)}
+
+.layout{display:flex;min-height:100vh}
+.sidebar{
+  width:238px;flex:0 0 238px;background:var(--card);border-right:1px solid var(--border);
+  padding:22px 14px;position:sticky;top:0;height:100vh;overflow-y:auto;
+}
+.brand{font-weight:700;font-size:17px;color:var(--primary);margin-bottom:3px}
+.brand-sub{font-size:11.5px;color:var(--muted);margin-bottom:20px;line-height:1.4}
+.nav-item{
+  display:flex;align-items:center;gap:10px;padding:10px 12px;border-radius:10px;
+  cursor:pointer;color:var(--muted);font-size:14.5px;font-weight:500;margin-bottom:3px;
+  transition:.15s;user-select:none;
+}
+.nav-item:hover{background:var(--primary-soft2);color:var(--primary)}
+.nav-item.active{background:var(--primary-soft);color:var(--primary-dark);font-weight:700}
+.main{flex:1;padding:26px 30px 80px;max-width:1150px;min-width:0}
+
+.cards{display:grid;grid-template-columns:repeat(auto-fill,minmax(255px,1fr));gap:16px;margin-top:18px}
+.card{
+  background:var(--card);border:1px solid var(--border);border-radius:16px;padding:18px;
+  box-shadow:var(--shadow);cursor:pointer;transition:.18s;
+}
+.card:hover{transform:translateY(-3px);border-color:var(--primary);box-shadow:0 8px 22px rgba(74,144,217,.18)}
+.card .ic{font-size:24px}
+.card h3{margin:8px 0 4px;font-size:16.5px}
+.card p{margin:0;color:var(--muted);font-size:13.5px}
+.card .mini{margin-top:10px;font-size:12.5px;color:var(--primary-dark);font-weight:600}
+.stats-row{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:12px;margin-bottom:8px}
+.stat{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:14px 16px;box-shadow:var(--shadow)}
+.stat-num{font-size:21px;font-weight:700;color:var(--primary-dark)}
+.stat-lbl{font-size:12.5px;color:var(--muted);margin-top:2px}
+
+button{font-family:inherit}
+.btn{
+  background:var(--primary);color:#fff;border:none;border-radius:10px;padding:10px 18px;
+  font-size:14.5px;font-weight:600;cursor:pointer;transition:.15s;
+}
+.btn:hover{background:var(--primary-dark)}
+.btn:disabled{opacity:.5;cursor:not-allowed}
+.btn.ghost{background:transparent;color:var(--primary);border:1.5px solid var(--primary)}
+.btn.ghost:hover{background:var(--primary-soft)}
+.btn.gray{background:var(--primary-soft);color:var(--primary-dark)}
+.btn.gray:hover{background:var(--border)}
+.btn.ok{background:var(--ok)}
+.btn.bad{background:var(--bad)}
+.btn-row{display:flex;gap:10px;flex-wrap:wrap;margin-top:16px}
+.icon-btn{
+  background:transparent;border:1px solid var(--border);border-radius:9px;width:34px;height:34px;
+  cursor:pointer;font-size:15px;color:var(--muted);display:flex;align-items:center;justify-content:center;
+}
+.icon-btn.on{background:var(--warn-bg);color:var(--warn);border-color:var(--warn)}
+.icon-btn.ok-on{background:var(--ok-bg);color:var(--ok);border-color:var(--ok)}
+
+input[type=text],select{
+  font-family:inherit;font-size:14px;padding:9px 12px;border-radius:10px;border:1px solid var(--border);
+  background:var(--card);color:var(--text);outline:none;
+}
+input[type=text]:focus,select:focus{border-color:var(--primary)}
+label{font-size:14px}
+.toolbar{display:flex;gap:10px;flex-wrap:wrap;align-items:center;margin-bottom:18px}
+.toolbar input[type=text]{flex:1;min-width:190px}
+
+.v-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:14px}
+.v-card{background:var(--card);border:1px solid var(--border);border-radius:15px;padding:16px;box-shadow:var(--shadow)}
+.v-head{display:flex;justify-content:space-between;gap:8px;align-items:flex-start}
+.v-word{font-size:18px;font-weight:700;color:var(--primary-dark)}
+.v-ipa{font-size:13px;color:var(--muted);margin-left:7px}
+.v-pos{display:inline-block;font-size:11.5px;background:var(--primary-soft);color:var(--primary-dark);
+  padding:1px 8px;border-radius:20px;margin-left:7px;font-weight:600}
+.v-actions{display:flex;gap:6px;flex:0 0 auto}
+.v-mean{font-size:14.5px;font-weight:600;margin-top:9px}
+.v-def{font-size:13.5px;color:var(--muted);margin-top:5px}
+.v-ex{font-size:13.5px;font-style:italic;margin-top:7px;padding-left:10px;border-left:3px solid var(--primary-soft);color:var(--text)}
+.v-tag{font-size:11.5px;color:var(--muted);margin-top:10px}
+
+.q-wrap{background:var(--card);border:1px solid var(--border);border-radius:16px;padding:24px;box-shadow:var(--shadow);max-width:820px}
+.q-top{display:flex;justify-content:space-between;align-items:center;gap:12px;font-size:13px;color:var(--muted);margin-bottom:8px;flex-wrap:wrap}
+.q-text{font-size:17px;font-weight:600;margin:14px 0 18px;line-height:1.6}
+.opt{
+  display:flex;gap:12px;align-items:center;border:1.5px solid var(--border);border-radius:12px;
+  padding:12px 15px;margin-bottom:10px;cursor:pointer;font-size:15px;background:transparent;
+  width:100%;text-align:left;color:var(--text);transition:.12s;
+}
+.opt:hover{border-color:var(--primary);background:var(--primary-soft2)}
+.opt .key{
+  flex:0 0 28px;height:28px;border-radius:8px;background:var(--primary-soft);color:var(--primary-dark);
+  display:flex;align-items:center;justify-content:center;font-weight:700;font-size:13px;
+}
+.opt.correct{border-color:var(--ok);background:var(--ok-bg)}
+.opt.correct .key{background:var(--ok);color:#fff}
+.opt.wrong{border-color:var(--bad);background:var(--bad-bg)}
+.opt.wrong .key{background:var(--bad);color:#fff}
+.opt.picked{border-color:var(--primary);background:var(--primary-soft)}
+.opt.picked .key{background:var(--primary);color:#fff}
+.opt.dim{opacity:.62}
+.opt:disabled{cursor:default}
+.fb{margin-top:16px;border-radius:12px;padding:14px 16px;font-size:14px}
+.fb.ok{background:var(--ok-bg);border:1px solid var(--ok);color:var(--ok)}
+.fb.no{background:var(--bad-bg);border:1px solid var(--bad);color:var(--bad)}
+.fb .exp{color:var(--text);margin-top:7px;font-size:13.5px}
+.bar{height:8px;background:var(--primary-soft);border-radius:20px;overflow:hidden;margin:8px 0 0}
+.bar > i{display:block;height:100%;background:var(--primary);border-radius:20px;transition:width .25s}
+
+.fc-scene{perspective:1400px;max-width:620px;margin:0 auto}
+.fc{
+  position:relative;min-height:290px;border-radius:20px;cursor:pointer;
+  transform-style:preserve-3d;transition:transform .55s cubic-bezier(.4,.2,.2,1);
+}
+.fc.flipped{transform:rotateY(180deg)}
+.fc-face{
+  position:absolute;inset:0;backface-visibility:hidden;background:var(--card);
+  border:1px solid var(--border);border-radius:20px;box-shadow:var(--shadow);
+  display:flex;flex-direction:column;align-items:center;justify-content:center;
+  padding:28px;text-align:center;
+}
+.fc-face.back{transform:rotateY(180deg);justify-content:center;gap:8px}
+.fc-word{font-size:34px;font-weight:700;color:var(--primary-dark)}
+.fc-ipa{font-size:16px;color:var(--muted);margin-top:8px}
+.fc-pos{font-size:13px;background:var(--primary-soft);color:var(--primary-dark);padding:2px 12px;border-radius:20px;margin-top:12px;font-weight:600}
+.fc-hint{position:absolute;bottom:16px;font-size:12px;color:var(--muted)}
+.fc-mean{font-size:22px;font-weight:700}
+.fc-def{font-size:14.5px;color:var(--muted)}
+.fc-ex{font-size:14px;font-style:italic;margin-top:6px}
+
+.panel{background:var(--card);border:1px solid var(--border);border-radius:16px;padding:22px;box-shadow:var(--shadow);max-width:760px}
+.field{margin-bottom:18px}
+.field > label.title{display:block;font-weight:700;font-size:14px;margin-bottom:9px}
+.chips{display:flex;flex-wrap:wrap;gap:9px}
+.chip{display:flex;align-items:center;gap:7px;border:1.5px solid var(--border);border-radius:10px;padding:8px 13px;font-size:14px;cursor:pointer}
+.chip input{accent-color:var(--primary)}
+.chip:hover{border-color:var(--primary)}
+.navigator{display:flex;flex-wrap:wrap;gap:6px;margin-top:18px}
+.navdot{
+  width:34px;height:34px;border-radius:9px;border:1.5px solid var(--border);background:transparent;
+  color:var(--muted);font-size:12.5px;font-weight:600;cursor:pointer;
+}
+.navdot.done{background:var(--primary-soft);color:var(--primary-dark);border-color:var(--primary)}
+.navdot.cur{background:var(--primary);color:#fff;border-color:var(--primary)}
+
+.score-hero{background:var(--card);border:1px solid var(--border);border-radius:18px;padding:26px;box-shadow:var(--shadow);text-align:center;max-width:760px}
+.score-big{font-size:44px;font-weight:800;color:var(--primary-dark);line-height:1.1}
+table{width:100%;border-collapse:collapse;font-size:14px;margin-top:10px}
+th,td{padding:9px 10px;border-bottom:1px solid var(--border);text-align:left}
+th{color:var(--muted);font-size:12.5px;text-transform:uppercase;letter-spacing:.4px}
+td.num,th.num{text-align:right}
+.review-item{background:var(--card);border:1px solid var(--border);border-radius:13px;padding:14px 16px;margin-bottom:11px}
+.review-item .qq{font-weight:600;font-size:14.5px}
+.review-item .aa{font-size:13.5px;margin-top:7px}
+.tag{display:inline-block;font-size:11px;font-weight:700;padding:2px 9px;border-radius:20px;margin-right:6px}
+.tag.ok{background:var(--ok-bg);color:var(--ok)}
+.tag.no{background:var(--bad-bg);color:var(--bad)}
+.muted{color:var(--muted);font-size:13.5px}
+.empty{text-align:center;padding:50px 20px;color:var(--muted)}
+.empty .ic{font-size:40px;display:block;margin-bottom:10px}
+.pill{display:inline-block;font-size:11.5px;background:var(--primary-soft);color:var(--primary-dark);padding:2px 10px;border-radius:20px;font-weight:600}
+hr{border:none;border-top:1px solid var(--border);margin:22px 0}
+
+@media (max-width:860px){
+  .layout{flex-direction:column}
+  .sidebar{
+    position:fixed;bottom:0;left:0;right:0;top:auto;width:100%;height:auto;flex:none;
+    border-right:none;border-top:1px solid var(--border);padding:6px 8px;z-index:60;
+  }
+  .brand,.brand-sub{display:none}
+  #nav{display:flex;gap:3px;overflow-x:auto;scrollbar-width:none}
+  #nav::-webkit-scrollbar{display:none}
+  .nav-item{flex-direction:column;gap:2px;font-size:10px;padding:7px 11px;margin:0;white-space:nowrap;border-radius:11px}
+  .nav-item span{font-size:10px}
+  .main{padding:16px 14px 96px}
+  h1{font-size:21px}
+  .q-wrap{padding:17px}
+  .q-text{font-size:15.5px}
+  .fc-word{font-size:27px}
+  .score-big{font-size:34px}
+}
+</style>
+</head>
+<body>
+<div class="layout">
+  <aside class="sidebar">
+    <div class="brand">📘 English Vocabulary</div>
+    <div class="brand-sub">Unit 1–3 · 48 words<br>176 practice exercises</div>
+    <nav id="nav">
+      <div class="nav-item" data-view="dashboard">🏠<span>Dashboard</span></div>
+      <div class="nav-item" data-view="vocab">📚<span>Vocabulary</span></div>
+      <div class="nav-item" data-view="flashcards">🃏<span>Flashcards</span></div>
+      <div class="nav-item" data-view="practice">✏️<span>Practice</span></div>
+      <div class="nav-item" data-view="test">📝<span>Test</span></div>
+      <div class="nav-item" data-view="progress">📊<span>Progress</span></div>
+      <div class="nav-item" data-view="mistakes">❌<span>Mistakes</span></div>
+      <div class="nav-item" data-view="favorites">⭐<span>Favorites</span></div>
+      <div class="nav-item" data-view="settings">⚙️<span>Settings</span></div>
+    </nav>
+  </aside>
+  <main class="main" id="view"></main>
+</div>
+
+<script>
+/* =========================================================
+   1. VOCABULARY DATA — 48 words (Unit 1–3, Chapter 1–2)
+   ========================================================= */
+const VOCAB = [
+  /* ---------- UNIT 1 · CHAPTER 1 ---------- */
+  {w:"academic", ipa:"/ˌækəˈdemɪk/", pos:"adj", unit:1, chapter:1,
+   mean:"thuộc học thuật, mang tính học thuật",
+   def:"connected with education, schools and studying",
+   ex:"Regular reading can improve students' academic performance."},
+  {w:"component", ipa:"/kəmˈpəʊnənt/", pos:"n", unit:1, chapter:1,
+   mean:"thành phần, bộ phận cấu thành",
+   def:"one of several parts that together make a whole thing",
+   ex:"The course consists of several important components."},
+  {w:"transfer", ipa:"/trænsˈfɜː(r)/", pos:"v", unit:1, chapter:1,
+   mean:"chuyển, truyền (kiến thức, kỹ năng)",
+   def:"to move something or someone from one place or situation to another",
+   ex:"Knowledge transferable from one situation to another is an important learning skill."},
+  {w:"long-term", ipa:"/ˌlɒŋ ˈtɜːm/", pos:"adj", unit:1, chapter:1,
+   mean:"dài hạn, lâu dài",
+   def:"lasting or continuing for a long period of time in the future",
+   ex:"Good study habits can have long-term benefits."},
+  {w:"structure", ipa:"/ˈstrʌktʃə(r)/", pos:"n", unit:1, chapter:1,
+   mean:"cấu trúc, kết cấu",
+   def:"the way in which the parts of something are arranged or organized",
+   ex:"Students need to understand the structure of an essay."},
+  {w:"effective", ipa:"/ɪˈfektɪv/", pos:"adj", unit:1, chapter:1,
+   mean:"hiệu quả, có tác dụng tốt",
+   def:"producing the result that is wanted or intended",
+   ex:"This is an extremely effective way to learn new vocabulary."},
+  {w:"technique", ipa:"/tekˈniːk/", pos:"n", unit:1, chapter:1,
+   mean:"kỹ thuật, phương pháp, cách làm",
+   def:"a particular way of doing something, especially one that requires skill",
+   ex:"The teacher introduced a new learning technique."},
+  {w:"assess", ipa:"/əˈses/", pos:"v", unit:1, chapter:1,
+   mean:"đánh giá, thẩm định",
+   def:"to make a judgment about the quality, size or value of something",
+   ex:"Teachers use tests to assess students' progress."},
+
+  /* ---------- UNIT 1 · CHAPTER 2 ---------- */
+  {w:"reform", ipa:"/rɪˈfɔːm/", pos:"n", unit:1, chapter:2,
+   mean:"sự cải cách, sự đổi mới",
+   def:"a change made to a system, law or institution in order to improve it",
+   ex:"Educational reform is often necessary when old methods are no longer effective."},
+  {w:"measure", ipa:"/ˈmeʒə(r)/", pos:"v", unit:1, chapter:2,
+   mean:"đo lường, đánh giá",
+   def:"to judge the size, amount or degree of something",
+   ex:"The test is designed to measure students' reading ability."},
+  {w:"memorize", ipa:"/ˈmeməraɪz/", pos:"v", unit:1, chapter:2,
+   mean:"ghi nhớ, học thuộc lòng",
+   def:"to learn something so that you remember it exactly",
+   ex:"Simply memorizing information may not lead to real understanding."},
+  {w:"apply", ipa:"/əˈplaɪ/", pos:"v", unit:1, chapter:2,
+   mean:"áp dụng, ứng dụng",
+   def:"to use something such as knowledge or a method in a particular situation",
+   ex:"Students should learn how to apply their knowledge in real-life situations."},
+  {w:"alternative", ipa:"/ɔːlˈtɜːnətɪv/", pos:"n", unit:1, chapter:2,
+   mean:"sự lựa chọn thay thế, phương án khác",
+   def:"a thing that you can choose instead of another thing",
+   ex:"Online learning provides an alternative to traditional classroom teaching."},
+  {w:"debate", ipa:"/dɪˈbeɪt/", pos:"n", unit:1, chapter:2,
+   mean:"cuộc tranh luận, cuộc thảo luận",
+   def:"a formal discussion in which people express different opinions",
+   ex:"The students had a lively debate about the best way to study."},
+  {w:"unique", ipa:"/juˈniːk/", pos:"adj", unit:1, chapter:2,
+   mean:"độc đáo, riêng biệt, có một không hai",
+   def:"being the only one of its kind; very special",
+   ex:"Vietnam has many unique cultural traditions."},
+  {w:"craft", ipa:"/krɑːft/", pos:"n", unit:1, chapter:2,
+   mean:"đồ thủ công; nghề thủ công",
+   def:"an activity in which you make things with your hands; an object made this way",
+   ex:"Traditional Vietnamese crafts are popular with foreign tourists."},
+
+  /* ---------- UNIT 2 · CHAPTER 1 ---------- */
+  {w:"accommodation", ipa:"/əˌkɒməˈdeɪʃn/", pos:"n", unit:2, chapter:1,
+   mean:"chỗ ở, nơi ăn ở",
+   def:"a place to live, stay or work in",
+   ex:"We need to book our accommodation before travelling."},
+  {w:"exhausting", ipa:"/ɪɡˈzɔːstɪŋ/", pos:"adj", unit:2, chapter:1,
+   mean:"mệt mỏi, kiệt sức (làm cho ai mệt)",
+   def:"making you feel very tired",
+   ex:"Climbing the mountain was extremely exhausting."},
+  {w:"basic", ipa:"/ˈbeɪsɪk/", pos:"adj", unit:2, chapter:1,
+   mean:"cơ bản, đơn giản và cần thiết",
+   def:"simple and forming the most necessary part of something",
+   ex:"The hotel offers only basic facilities."},
+  {w:"possession", ipa:"/pəˈzeʃn/", pos:"n", unit:2, chapter:1,
+   mean:"tài sản, vật sở hữu",
+   def:"something that you own or have with you",
+   ex:"Tourists should protect their personal possessions."},
+  {w:"fabulous", ipa:"/ˈfæbjələs/", pos:"adj", unit:2, chapter:1,
+   mean:"tuyệt vời, phi thường",
+   def:"extremely good or impressive",
+   ex:"We had a fabulous holiday in Vũng Tàu."},
+  {w:"range", ipa:"/reɪndʒ/", pos:"n", unit:2, chapter:1,
+   mean:"phạm vi, loạt, nhiều loại khác nhau",
+   def:"a variety of things of the same type",
+   ex:"The shop offers a wide range of souvenirs."},
+  {w:"eager", ipa:"/ˈiːɡə(r)/", pos:"adj", unit:2, chapter:1,
+   mean:"háo hức, hăm hở, mong muốn",
+   def:"wanting to do or have something very much",
+   ex:"The children were eager to see the new film."},
+  {w:"precaution", ipa:"/prɪˈkɔːʃn/", pos:"n", unit:2, chapter:1,
+   mean:"biện pháp phòng ngừa, sự đề phòng",
+   def:"something you do to prevent something bad from happening",
+   ex:"Travellers should take extra precautions when carrying valuable items."},
+
+  /* ---------- UNIT 2 · CHAPTER 2 ---------- */
+  {w:"departure", ipa:"/dɪˈpɑːtʃə(r)/", pos:"n", unit:2, chapter:2,
+   mean:"sự khởi hành, sự rời đi",
+   def:"the act of leaving a place, especially to start a journey",
+   ex:"We arrived at the airport two hours before departure."},
+  {w:"expire", ipa:"/ɪkˈspaɪə(r)/", pos:"v", unit:2, chapter:2,
+   mean:"hết hạn, hết hiệu lực",
+   def:"to be no longer valid or able to be used",
+   ex:"Check the date to make sure your passport has not expired."},
+  {w:"vulnerable", ipa:"/ˈvʌlnərəbl/", pos:"adj", unit:2, chapter:2,
+   mean:"dễ bị tổn thương, dễ gặp nguy hiểm",
+   def:"easily harmed, attacked or affected by something",
+   ex:"Children are particularly vulnerable in unfamiliar places."},
+  {w:"purchase", ipa:"/ˈpɜːtʃəs/", pos:"v", unit:2, chapter:2,
+   mean:"mua, tậu",
+   def:"to buy something",
+   ex:"Online purchasing of tickets is now very common."},
+  {w:"authorized", ipa:"/ˈɔːθəraɪzd/", pos:"adj", unit:2, chapter:2,
+   mean:"được ủy quyền, được cho phép chính thức",
+   def:"having official permission to do something",
+   ex:"Only authorized agents can sell these tickets."},
+  {w:"assume", ipa:"/əˈsjuːm/", pos:"v", unit:2, chapter:2,
+   mean:"giả định, cho rằng (khi chưa có bằng chứng)",
+   def:"to think that something is true although you have no proof",
+   ex:"It is dangerous to make an assumption without checking the facts."},
+  {w:"sincere", ipa:"/sɪnˈsɪə(r)/", pos:"adj", unit:2, chapter:2,
+   mean:"chân thành, thành thật",
+   def:"saying or feeling what you really think or feel; honest",
+   ex:"She gave me a very sincere apology."},
+  {w:"represent", ipa:"/ˌreprɪˈzent/", pos:"v", unit:2, chapter:2,
+   mean:"đại diện cho, thể hiện, tượng trưng cho",
+   def:"to stand for or express something",
+   ex:"The documentary represents the importance of cultural preservation."},
+
+  /* ---------- UNIT 3 · CHAPTER 1 ---------- */
+  {w:"director", ipa:"/dəˈrektə(r)/", pos:"n", unit:3, chapter:1,
+   mean:"đạo diễn",
+   def:"a person who directs a film, play or programme",
+   ex:"The film's directors worked closely with the actors."},
+  {w:"credits", ipa:"/ˈkredɪts/", pos:"n", unit:3, chapter:1,
+   mean:"phần giới thiệu tên những người làm phim (ở đầu/cuối phim)",
+   def:"a list of the people who helped make a film, shown at the beginning or end",
+   ex:"We stayed until the end to read the film credits."},
+  {w:"crucial", ipa:"/ˈkruːʃl/", pos:"adj", unit:3, chapter:1,
+   mean:"quan trọng, cốt yếu, mang tính quyết định",
+   def:"extremely important because it affects the result of something",
+   ex:"Good teamwork is crucial to the success of a production."},
+  {w:"transform", ipa:"/trænsˈfɔːm/", pos:"v", unit:3, chapter:1,
+   mean:"biến đổi, thay đổi hoàn toàn",
+   def:"to change something completely, usually in a good way",
+   ex:"Special effects can completely transform an ordinary scene."},
+  {w:"scene", ipa:"/siːn/", pos:"n", unit:3, chapter:1,
+   mean:"cảnh (trong phim, kịch)",
+   def:"a single part of a film, play or book, usually in one place",
+   ex:"The final scene was filmed in a beautiful location."},
+  {w:"production", ipa:"/prəˈdʌkʃn/", pos:"n", unit:3, chapter:1,
+   mean:"sự sản xuất, quá trình làm ra (phim)",
+   def:"the process of making something, especially a film or programme",
+   ex:"The film took six months to complete because of the large-scale production."},
+  {w:"exclusive", ipa:"/ɪkˈskluːsɪv/", pos:"adj", unit:3, chapter:1,
+   mean:"độc quyền, riêng biệt, chỉ dành cho một số ít",
+   def:"only given to or used by a particular person or group",
+   ex:"The interview was shown exclusively on one television channel."},
+  {w:"studio", ipa:"/ˈstjuːdiəʊ/", pos:"n", unit:3, chapter:1,
+   mean:"trường quay, xưởng phim",
+   def:"a place where films or television programmes are made",
+   ex:"Several famous films were made in these studios."},
+
+  /* ---------- UNIT 3 · CHAPTER 2 ---------- */
+  {w:"ambition", ipa:"/æmˈbɪʃn/", pos:"n", unit:3, chapter:2,
+   mean:"tham vọng, hoài bão",
+   def:"a strong desire to achieve something",
+   ex:"His ambition helped him continue despite many difficulties."},
+  {w:"passion", ipa:"/ˈpæʃn/", pos:"n", unit:3, chapter:2,
+   mean:"đam mê, niềm say mê",
+   def:"a very strong feeling of love or enthusiasm for something",
+   ex:"Her passion for filmmaking began when she was a teenager."},
+  {w:"inspired", ipa:"/ɪnˈspaɪəd/", pos:"adj", unit:3, chapter:2,
+   mean:"được truyền cảm hứng",
+   def:"having the desire or enthusiasm to do something, especially something creative",
+   ex:"The director was strongly inspired by science-fiction movies."},
+  {w:"debut", ipa:"/ˈdeɪbjuː/", pos:"n", unit:3, chapter:2,
+   mean:"sự ra mắt, lần xuất hiện đầu tiên trước công chúng",
+   def:"the first public appearance of a performer or a film",
+   ex:"A performer's debut is their first public appearance."},
+  {w:"influential", ipa:"/ˌɪnfluˈenʃl/", pos:"adj", unit:3, chapter:2,
+   mean:"có ảnh hưởng, có tác động lớn",
+   def:"having a lot of influence on somebody or something",
+   ex:"An influential person can affect other people or ideas."},
+  {w:"preserve", ipa:"/prɪˈzɜːv/", pos:"v", unit:3, chapter:2,
+   mean:"bảo tồn, giữ gìn",
+   def:"to keep something in its original state or in good condition",
+   ex:"The director wanted to preserve the traditional atmosphere of the village."},
+  {w:"metaphor", ipa:"/ˈmetəfə(r)/", pos:"n", unit:3, chapter:2,
+   mean:"ẩn dụ",
+   def:"a figure of speech in which one thing is described as another",
+   ex:"A metaphor is a figure of speech in which one thing is described as another."},
+  {w:"inspiration", ipa:"/ˌɪnspəˈreɪʃn/", pos:"n", unit:3, chapter:2,
+   mean:"nguồn cảm hứng, sự truyền cảm hứng",
+   def:"something that encourages or stimulates creative ideas",
+   ex:"Her childhood became a source of inspiration for many of her stories."}
+];
+
+/* =========================================================
+   2. QUESTION BANK — 176 questions
+   ========================================================= */
+const RAWQ = [
+/* ---------- PART A — WORD FORM (1–42) ---------- */
+[1,"A","Regular reading can improve students' ______ performance.",["academy","academic","academically","academics"],1,"Trước danh từ performance cần một tính từ bổ nghĩa → academic (thuộc học thuật)."],
+[2,"A","The course consists of several important ______.",["component","components","composing","composed"],1,"Sau several + danh từ đếm được số nhiều → components."],
+[3,"A","Knowledge ______ from one situation to another is an important learning skill.",["transfer","transferred","transferable","transferring"],2,"Cần tính từ bổ nghĩa cho knowledge → transferable (có thể chuyển được)."],
+[4,"A","Good study habits can have ______ benefits.",["long-term","long-termly","longer-termly","longed-term"],0,"Trước danh từ benefits cần tính từ ghép long-term (dài hạn)."],
+[5,"A","Students need to understand the ______ of an essay.",["structural","structure","structurally","structured"],1,"Sau mạo từ the cần danh từ → structure."],
+[6,"A","This is an extremely ______ way to learn new vocabulary.",["effect","effectively","effective","effectiveness"],2,"Trạng từ extremely + tính từ + danh từ way → effective."],
+[7,"A","The teacher introduced a new learning ______.",["technically","technician","technique","technical"],2,"Sau tính từ learning cần danh từ chỉ phương pháp → technique."],
+[8,"A","Teachers use tests to ______ students' progress.",["assessment","assess","assessed","assessing"],1,"Sau to chỉ mục đích cần động từ nguyên thể → assess."],
+[9,"A","Educational ______ is often necessary when old methods are no longer effective.",["reform","reformation","reformed","reforming"],0,"Cần danh từ làm chủ ngữ → reform (sự cải cách)."],
+[10,"A","The test is designed to ______ students' reading ability.",["measurement","measured","measure","measurable"],2,"Sau to cần động từ nguyên thể → measure."],
+[11,"A","Simply ______ information may not lead to real understanding.",["memorization","memorizing","memorized","memorize"],1,"Chủ ngữ của câu là một hành động → dùng danh động từ: memorizing."],
+[12,"A","Students should learn how to ______ their knowledge in real-life situations.",["application","applicable","apply","applied"],2,"Sau how to cần động từ nguyên thể → apply."],
+[13,"A","Online learning provides an ______ to traditional classroom teaching.",["alternatively","alternative","alternation","alter"],1,"Sau mạo từ an cần danh từ số ít → alternative."],
+[14,"A","The students had a lively ______ about the best way to study.",["debated","debater","debate","debating"],2,"Sau tính từ lively cần danh từ → debate."],
+[15,"A","Vietnam has many ______ cultural traditions.",["uniquely","uniqueness","unique","union"],2,"Trước cụm danh từ cultural traditions cần tính từ → unique."],
+[16,"A","Traditional Vietnamese ______ are popular with foreign tourists.",["crafty","crafting","crafts","crafted"],2,"Cần danh từ số nhiều làm chủ ngữ → crafts."],
+[17,"A","We need to book our ______ before travelling.",["accommodate","accommodating","accommodation","accommodated"],2,"Sau tính từ sở hữu our cần danh từ → accommodation."],
+[18,"A","Climbing the mountain was extremely ______.",["exhaust","exhausted","exhaustion","exhausting"],3,"Chủ ngữ là sự việc gây cảm giác → dùng tính từ đuôi -ing: exhausting."],
+[19,"A","The hotel offers only ______ facilities.",["basic","basically","basis","basical"],0,"Trước danh từ facilities cần tính từ → basic."],
+[20,"A","Tourists should protect their personal ______.",["possessive","possessed","possessions","possess"],2,"Sau tính từ personal cần danh từ số nhiều → possessions."],
+[21,"A","We had a ______ holiday in Vũng Tàu.",["fabulous","fabulously","fabulousness","fable"],0,"Trước danh từ holiday cần tính từ → fabulous."],
+[22,"A","The shop offers a wide ______ of souvenirs.",["ranged","range","ranging","ranger"],1,"Cụm a wide range of + danh từ số nhiều → range."],
+[23,"A","The children were ______ to see the new film.",["eagerness","eagerly","eager","eagered"],2,"Sau to be cần tính từ → eager."],
+[24,"A","Travellers should take extra ______ when carrying valuable items.",["precautions","precautionary","cautiously","precaution"],0,"Cụm cố định take precautions (có biện pháp phòng ngừa) → precautions."],
+[25,"A","We arrived at the airport two hours before ______.",["departed","departure","departing","depart"],1,"Sau giới từ before cần danh từ → departure."],
+[26,"A","Check the date to make sure your passport has not ______.",["expiration","expiring","expired","expiry"],2,"Sau has not (hiện tại hoàn thành) cần quá khứ phân từ → expired."],
+[27,"A","Children are particularly ______ in unfamiliar places.",["vulnerability","vulnerable","vulnerably","vulnerabilize"],1,"Sau to be + trạng từ cần tính từ → vulnerable."],
+[28,"A","Online ______ of tickets is now very common.",["purchase","purchasing","purchaser","purchased"],1,"Cần danh động từ làm chủ ngữ của câu → purchasing."],
+[29,"A","Only ______ agents can sell these tickets.",["authorization","authorize","authorized","authorizing"],2,"Trước danh từ agents cần tính từ → authorized."],
+[30,"A","It is dangerous to make an ______ without checking the facts.",["assuming","assumed","assume","assumption"],3,"Cụm make an assumption (đưa ra giả định) → danh từ assumption."],
+[31,"A","She gave me a very ______ apology.",["sincerely","sincere","sincerity","sincereness"],1,"Trước danh từ apology cần tính từ → sincere."],
+[32,"A","The film's ______ worked closely with the actors.",["directors","directing","direction","direct"],0,"Cần danh từ chỉ người ở số nhiều làm chủ ngữ → directors."],
+[33,"A","We stayed until the end to read the film ______.",["credit","credited","credits","creditor"],2,"Cụm the film credits (phần giới thiệu cuối phim) → credits."],
+[34,"A","Good teamwork is ______ to the success of a production.",["crucially","crucial","crucify","crucialness"],1,"Cấu trúc be crucial to something → tính từ crucial."],
+[35,"A","Special effects can completely ______ an ordinary scene.",["transformation","transformative","transform","transformed"],2,"Sau trạng từ completely và trước tân ngữ cần động từ nguyên thể → transform."],
+[36,"A","The final ______ was filmed in a beautiful location.",["scenic","scene","scenery","scenically"],1,"Cần danh từ chỉ cảnh trong phim → scene."],
+[37,"A","The film took six months to complete because of the large-scale ______.",["produce","producer","production","productive"],2,"Sau tính từ ghép large-scale cần danh từ → production."],
+[38,"A","The interview was shown ______ on one television channel.",["exclusive","exclusiveness","exclusively","excluded"],2,"Bổ nghĩa cho động từ was shown cần trạng từ → exclusively."],
+[39,"A","Several famous films were made in these ______.",["studios","studied","studies","studious"],0,"Cần danh từ số nhiều chỉ trường quay → studios."],
+[40,"A","His ______ helped him continue despite many difficulties.",["ambitious","ambitiously","ambition","ambience"],2,"Sau tính từ sở hữu his cần danh từ → ambition."],
+[41,"A","Her ______ for filmmaking began when she was a teenager.",["passionate","passion","passionately","passions"],1,"Cụm passion for something (niềm đam mê với) → passion."],
+[42,"A","The director was strongly ______ by science-fiction movies.",["inspiration","inspirational","inspired","inspiring"],2,"Câu bị động be + V3 → inspired."],
+
+/* ---------- PART B — VOCABULARY IN CONTEXT (43–90) ---------- */
+[43,"B","Students who develop good study habits may see ______ improvements in their results.",["temporary","long-term","accidental","narrow"],1,"long-term improvements = những cải thiện lâu dài, hợp với ngữ cảnh thói quen học tập tốt."],
+[44,"B","Which word is closest in meaning to effective?",["successful","expensive","difficult","traditional"],0,"effective = producing the result you want → gần nghĩa nhất với successful."],
+[45,"B","A technique is best described as ______.",["a particular method of doing something","a large building","a period of time","an examination result"],0,"technique = một phương pháp cụ thể để làm gì đó."],
+[46,"B","If teachers assess students, they ______.",["punish them","evaluate them","employ them","entertain them"],1,"assess = evaluate (đánh giá) học sinh."],
+[47,"B","The word reform refers to ______.",["a complete failure","a change intended to improve something","a type of examination","a personal possession"],1,"reform = sự thay đổi nhằm cải thiện điều gì đó."],
+[48,"B","To measure students' progress means to ______.",["ignore it","compare or evaluate it","prevent it","memorize it"],1,"measure = đo lường, đánh giá sự tiến bộ."],
+[49,"B","Which sentence uses apply correctly?",["She applied her knowledge to the problem.","She applied the answer into memory.","She applied very academic.","She applied the debate."],0,"apply something to something = áp dụng kiến thức vào một vấn đề."],
+[50,"B","An alternative is ______.",["an original mistake","another possibility or choice","a difficult examination","a fixed structure"],1,"alternative = một khả năng hay lựa chọn khác."],
+[51,"B","A debate usually involves ______.",["two or more sides discussing an issue","travelling abroad","watching a film","buying a ticket"],0,"debate = cuộc tranh luận giữa hai hay nhiều phía về một vấn đề."],
+[52,"B","Something unique is ______.",["very common","exactly the same as everything else","special or one of a kind","extremely cheap"],2,"unique = đặc biệt, có một không hai."],
+[53,"B","Traditional crafts are usually ______.",["handmade products","electronic devices","hotel services","academic subjects"],0,"crafts = sản phẩm thủ công, thường được làm bằng tay."],
+[54,"B","If a hotel provides accommodation, it provides ______.",["transportation","a place to stay","food only","entertainment only"],1,"accommodation = chỗ ở, nơi lưu trú."],
+[55,"B","If an activity is exhausting, it makes you feel ______.",["excited","tired","hungry","nervous"],1,"exhausting = khiến người ta mệt mỏi, kiệt sức."],
+[56,"B","Basic facilities are usually ______.",["simple and necessary","luxurious and expensive","unnecessary","highly advanced"],0,"basic = đơn giản và cần thiết."],
+[57,"B","Your personal possessions are your ______.",["opinions","belongings","plans","documents only"],1,"possessions = belongings (tài sản, đồ đạc sở hữu)."],
+[58,"B","If you describe a holiday as fabulous, you mean it was ______.",["terrible","ordinary","wonderful","stressful"],2,"fabulous = tuyệt vời, wonderful."],
+[59,"B","A wide range of products means ______.",["only one product","many different types of products","expensive products only","damaged products"],1,"a wide range of = nhiều loại khác nhau."],
+[60,"B","If you are eager to travel, you are ______.",["unwilling","very interested and excited","afraid","too tired"],1,"eager = rất muốn, háo hức."],
+[61,"B","Precautions are actions taken to ______.",["create problems","prevent danger or trouble","increase expenses","delay travel"],1,"precautions = biện pháp phòng ngừa nhằm tránh nguy hiểm hoặc rắc rối."],
+[62,"B","Your departure is the time when you ______.",["arrive","leave","sleep","shop"],1,"departure = sự khởi hành, thời điểm rời đi."],
+[63,"B","If a passport expires, it ______.",["becomes invalid","becomes cheaper","becomes longer","becomes safer"],0,"expire = hết hạn, không còn hiệu lực."],
+[64,"B","A person who is vulnerable is ______.",["difficult to affect","easily harmed or affected","highly experienced","completely independent"],1,"vulnerable = dễ bị tổn thương, dễ bị ảnh hưởng."],
+[65,"B","Purchasing a ticket means ______ one.",["cancelling","buying","borrowing","losing"],1,"purchase = buy (mua)."],
+[66,"B","An authorized person has ______.",["official permission","no experience","no identification","a personal opinion"],0,"authorized = được cấp phép chính thức."],
+[67,"B","To assume something means to ______.",["prove it scientifically","believe it without complete proof","reject it immediately","measure it carefully"],1,"assume = cho rằng điều gì đúng dù chưa có bằng chứng đầy đủ."],
+[68,"B","A sincere person usually speaks ______.",["dishonestly","honestly and genuinely","angrily","carelessly"],1,"sincere = chân thành, thật lòng."],
+[69,"B","Film directors are responsible for ______.",["directing the making of films","selling cinema tickets","designing hotel rooms","writing school exams"],0,"director = người chỉ đạo, đạo diễn việc làm phim."],
+[70,"B","The credits at the end of a film usually show ______.",["the price of the film","the names of people involved in making it","the film's location only","the director's home address"],1,"credits = danh sách tên những người tham gia làm phim."],
+[71,"B","If something is crucial, it is ______.",["unnecessary","very important","unusual","temporary"],1,"crucial = rất quan trọng, cốt yếu."],
+[72,"B","To transform something means to ______.",["change it significantly","copy it","destroy it completely","measure it"],0,"transform = biến đổi một cách rõ rệt."],
+[73,"B","A scene is ______.",["a single part or setting of a film","the entire film industry","a type of camera","a film review"],0,"scene = một cảnh hoặc cảnh trí riêng lẻ trong phim."],
+[74,"B","Production refers to ______.",["the process of making something","the ending of a film","a film audience","a type of acting"],0,"production = quá trình sản xuất, làm ra sản phẩm hoặc phim."],
+[75,"B","If something is done exclusively for one group, it is done ______.",["randomly","only for that group","secretly by everyone","temporarily"],1,"exclusively = chỉ dành riêng cho một nhóm."],
+[76,"B","Film studios are places where ______.",["films or television programmes are made","tourists stay","students take exams","passports are issued"],0,"studio = trường quay, nơi sản xuất phim hoặc chương trình truyền hình."],
+[77,"B","A person's ambition is ______.",["a strong desire to achieve something","a feeling of exhaustion","a travel document","a type of debate"],0,"ambition = tham vọng, khát khao đạt được điều gì đó."],
+[78,"B","Passion means ______.",["strong enthusiasm or love for something","fear of something","complete knowledge","a basic skill"],0,"passion = niềm đam mê, sự say mê mãnh liệt."],
+[79,"B","A performer's debut is ______.",["their final performance","their first public appearance","their most expensive performance","their longest performance"],1,"debut = lần xuất hiện đầu tiên trước công chúng."],
+[80,"B","An influential person can ______.",["affect other people or ideas","avoid every problem","work without communication","travel without a passport"],0,"influential = có ảnh hưởng tới người khác hoặc ý tưởng."],
+[81,"B","To preserve something means to ______.",["protect it and keep it in its original or existing condition","replace it","sell it","forget it"],0,"preserve = bảo tồn, giữ gìn nguyên trạng."],
+[82,"B","If a film represents an idea, it ______.",["hides the idea completely","stands for or expresses the idea","destroys the idea","denies the idea"],1,"represent = đại diện, thể hiện, tượng trưng cho."],
+[83,"B","A metaphor is ______.",["a direct comparison using like","a figure of speech in which one thing is described as another","a type of documentary","a film review"],1,"metaphor = ẩn dụ, so sánh ngầm (khác với simile dùng like/as)."],
+[84,"B","Inspiration is something that ______.",["encourages or stimulates creative ideas","causes physical exhaustion","prevents learning","measures performance"],0,"inspiration = nguồn cảm hứng khơi gợi ý tưởng sáng tạo."],
+[85,"B","Students may remember information better when they understand its ______.",["structure","departure","possessions","scene"],0,"structure = cấu trúc; hiểu cấu trúc giúp ghi nhớ tốt hơn."],
+[86,"B","Using knowledge outside the classroom is an example of ______ it.",["assessing","applying","expiring","preserving"],1,"apply = áp dụng kiến thức vào thực tế."],
+[87,"B","A tourist may be more ______ to scams when travelling alone.",["crucial","vulnerable","fabulous","academic"],1,"vulnerable to something = dễ bị ảnh hưởng, dễ bị lừa."],
+[88,"B","Tourists should keep their valuable ______ with them.",["possessions","reforms","techniques","metaphors"],0,"possessions = tài sản, đồ có giá trị."],
+[89,"B","The hotel had a ______ of room types, from basic to luxurious.",["debut","range","metaphor","structure"],1,"a range of = nhiều loại khác nhau."],
+[90,"B","We checked the passport because we did not want it to ______ during the trip.",["assess","expire","debate","transform"],1,"expire = hết hạn."],
+
+/* ---------- PART C — MIXED VOCABULARY (91–110) ---------- */
+[91,"C","The professor introduced an effective ______ for remembering vocabulary.",["technique","departure","possession","metaphor"],0,"technique = phương pháp cụ thể để ghi nhớ từ vựng."],
+[92,"C","The company is considering educational ______ to improve the testing system.",["crafts","reforms","scenes","credits"],1,"reform = sự cải cách giáo dục."],
+[93,"C","Visitors can choose from a wide ______ of accommodation options.",["range","debut","ambition","reform"],0,"a wide range of = nhiều loại lựa chọn."],
+[94,"C","Always take sensible ______ when travelling to unfamiliar places.",["precautions","credits","components","metaphors"],0,"take precautions = có biện pháp phòng ngừa."],
+[95,"C","The actor's first major appearance was his television ______.",["passion","debut","departure","structure"],1,"debut = lần xuất hiện đầu tiên."],
+[96,"C","The director wanted to ______ the traditional atmosphere of the village.",["preserve","assess","assume","expire"],0,"preserve = gìn giữ, bảo tồn."],
+[97,"C","She was ______ to learn more about Vietnamese history.",["eager","crucial","authorized","academic"],0,"be eager to do something = háo hức muốn làm gì."],
+[98,"C","The final ______ was one of the most memorable parts of the movie.",["scene","accommodation","component","technique"],0,"scene = cảnh phim."],
+[99,"C","You should not ______ that the information on the internet is always correct.",["transfer","assume","measure","preserve"],1,"assume = cho rằng điều gì đúng mà không có bằng chứng."],
+[100,"C","The film was so ______ that everyone talked about it afterwards.",["fabulous","basic","vulnerable","authorized"],0,"fabulous = tuyệt vời, đáng nhớ."],
+[101,"C","Good communication is ______ during film production.",["unique","crucial","eager","sincere"],1,"crucial = rất quan trọng, cốt yếu."],
+[102,"C","The museum sells traditional Vietnamese ______.",["crafts","studios","credits","reforms"],0,"crafts = đồ thủ công truyền thống."],
+[103,"C","Students need to ______ what they have learned instead of simply memorizing it.",["apply","expire","debut","represent"],0,"apply = áp dụng kiến thức đã học."],
+[104,"C","The programme is available ______ to university students.",["academically","exclusively","sincerely","uniquely"],1,"exclusively = chỉ dành riêng cho một nhóm."],
+[105,"C","His ______ for cinema began when he was very young.",["passion","departure","precaution","possession"],0,"passion for something = niềm đam mê với điều gì."],
+[106,"C","The documentary ______ the importance of cultural preservation.",["represents","purchases","assumes","expires"],0,"represent = thể hiện, phản ánh. Chủ ngữ số ít nên dùng represents."],
+[107,"C","The mountain trip was exciting but also physically ______.",["influential","exhausting","academic","authorized"],1,"exhausting = khiến mệt mỏi về thể chất."],
+[108,"C","Only ______ travel agencies can issue these documents.",["sincere","authorized","unique","alternative"],1,"authorized = được cấp phép chính thức."],
+[109,"C","Her childhood became a source of ______ for many of her stories.",["inspiration","accommodation","departure","measurement"],0,"a source of inspiration = nguồn cảm hứng."],
+[110,"C","An ______ method can be useful when traditional testing is not suitable.",["alternative","vulnerable","exhausting","fabulous"],0,"alternative = thay thế, khác với cách truyền thống."],
+
+/* ---------- PART D — VERB FORMS (111–156) ---------- */
+[111,"D","I enjoy ______ new vocabulary in context.",["learn","learning","to learn","learned"],1,"enjoy + V-ing."],
+[112,"D","The teacher suggested ______ the test in a different way.",["organize","to organize","organizing","organized"],2,"suggest + V-ing."],
+[113,"D","Students need ______ their knowledge in practical situations.",["applying","apply","to apply","applied"],2,"need + to V (chủ động)."],
+[114,"D","We decided ______ our accommodation in advance.",["booking","book","to book","booked"],2,"decide + to V."],
+[115,"D","She avoided ______ her passport information online.",["share","to share","sharing","shared"],2,"avoid + V-ing."],
+[116,"D","They hope ______ the museum tomorrow.",["visiting","visit","to visit","visited"],2,"hope + to V."],
+[117,"D","The teacher recommended ______ the instructions carefully.",["reading","to read","read","reads"],0,"recommend + V-ing (khuyên nên làm gì)."],
+[118,"D","He promised ______ his personal possessions safely.",["keeping","keep","to keep","kept"],2,"promise + to V."],
+[119,"D","We finished ______ the film before midnight.",["watch","watching","to watch","watched"],1,"finish + V-ing."],
+[120,"D","She agreed ______ the debate with her classmates.",["joining","join","to join","joined"],2,"agree + to V."],
+[121,"D","I don't mind ______ in a basic hotel.",["stay","staying","to stay","stayed"],1,"mind + V-ing."],
+[122,"D","They considered ______ to another city.",["move","moving","to move","moved"],1,"consider + V-ing."],
+[123,"D","The director decided ______ the final scene.",["changing","change","to change","changed"],2,"decide + to V."],
+[124,"D","He kept ______ about becoming a filmmaker.",["dream","to dream","dreaming","dreamed"],2,"keep + V-ing (tiếp tục làm gì)."],
+[125,"D","She refused ______ the assumption without evidence.",["accept","accepting","to accept","accepted"],2,"refuse + to V."],
+[126,"D","We practised ______ the new technique.",["using","use","to use","used"],0,"practise + V-ing."],
+[127,"D","The students learned ______ their ideas clearly.",["expressing","express","to express","expressed"],2,"learn + to V (học cách làm gì)."],
+[128,"D","He stopped ______ because he was exhausted.",["work","working","to work","worked"],1,"stop + V-ing = dừng hẳn việc đang làm."],
+[129,"D","The production team continued ______ after midnight.",["work","to working","working","worked"],2,"continue + V-ing."],
+[130,"D","The director plans ______ the film in Vietnam.",["shooting","shoot","to shoot","shot"],2,"plan + to V."],
+[131,"D","I remember ______ this studio when I was younger.",["visiting","to visit","visit","visited"],0,"remember + V-ing = nhớ lại việc đã làm trong quá khứ."],
+[132,"D","Remember ______ your passport before leaving home.",["checking","check","to check","checked"],2,"remember + to V = nhớ phải làm gì (chưa làm)."],
+[133,"D","She tried ______ the problem in another way.",["solving","solve","to solve","solved"],2,"try + to V = cố gắng làm gì."],
+[134,"D","Try ______ more carefully; you may find the answer.",["reading","read","to read","reads"],0,"try + V-ing = thử làm gì để xem kết quả."],
+[135,"D","He regretted ______ the opportunity.",["missing","miss","to miss","missed"],0,"regret + V-ing = hối tiếc việc đã làm."],
+[136,"D","We regret ______ you that your application was unsuccessful.",["informing","inform","to inform","informed"],2,"regret + to V = lấy làm tiếc khi phải thông báo điều gì."],
+[137,"D","The teacher made us ______ the paragraph again.",["writing","write","to write","wrote"],1,"make + somebody + V (nguyên thể không to)."],
+[138,"D","The film made audiences ______ about cultural identity.",["thinking","think","to think","thought"],1,"make + somebody + V (nguyên thể không to)."],
+[139,"D","She wants her students ______ more confidently.",["speaking","speak","to speak","spoke"],2,"want + somebody + to V."],
+[140,"D","We expect the new policy ______ the situation.",["improve","improving","to improve","improved"],2,"expect + somebody/something + to V."],
+[141,"D","The teacher encouraged us ______ more widely.",["reading","read","to read","reads"],2,"encourage + somebody + to V."],
+[142,"D","He let me ______ the studio.",["entering","enter","to enter","entered"],1,"let + somebody + V (nguyên thể không to)."],
+[143,"D","They allowed visitors ______ photographs.",["taking","take","to take","took"],2,"allow + somebody + to V."],
+[144,"D","She helped me ______ my travel documents.",["organize","organizing","to organizing","organized"],0,"help + somebody + (to) V → organize."],
+[145,"D","The students were busy ______ for the debate.",["prepare","to prepare","preparing","prepared"],2,"be busy + V-ing."],
+[146,"D","He is interested in ______ documentary films.",["make","making","to make","made"],1,"be interested in + V-ing."],
+[147,"D","They are responsible for ______ the production schedule.",["organize","to organize","organizing","organized"],2,"be responsible for + V-ing."],
+[148,"D","We are looking forward to ______ the final film.",["see","seeing","to see","seen"],1,"look forward to + V-ing."],
+[149,"D","She is good at ______ difficult ideas clearly.",["explain","explaining","to explain","explained"],1,"be good at + V-ing."],
+[150,"D","Before ______ the hotel, we checked our possessions.",["leave","leaving","to leave","left"],1,"Sau giới từ before dùng V-ing."],
+[151,"D","After ______ the film, they discussed the metaphor.",["watch","watching","to watch","watched"],1,"Sau giới từ after dùng V-ing."],
+[152,"D","Without ______ the instructions, you may make mistakes.",["read","to read","reading","reads"],2,"Sau giới từ without dùng V-ing."],
+[153,"D","He left without ______ goodbye.",["say","saying","to say","said"],1,"Sau giới từ without dùng V-ing."],
+[154,"D","Instead of ______ everything, students should understand the main ideas.",["memorise","memorising","to memorise","memorised"],1,"instead of + V-ing."],
+[155,"D","She succeeded in ______ the problem.",["solve","solving","to solve","solved"],1,"succeed in + V-ing."],
+[156,"D","The director went on ______ several successful films.",["make","making","to make","made"],2,"go on + to V = tiếp tục sang một việc mới."],
+
+/* ---------- PART E — MIXED VERB FORMS (157–176) ---------- */
+[157,"E","After finishing university, he went on ______ at a film studio.",["work","working","to work","worked"],2,"go on + to V = chuyển sang làm việc tiếp theo."],
+[158,"E","She stopped ______ because she wanted to answer the phone.",["studying","to study","study","studied"],1,"stop + to V = dừng lại để làm việc gì."],
+[159,"E","She stopped ______ when she realized the method was ineffective.",["to use","using","use","used"],1,"stop + V-ing = ngừng hẳn việc đang làm."],
+[160,"E","I remember ______ my first debate at university.",["join","joining","to join","joined"],1,"remember + V-ing = nhớ lại việc đã làm."],
+[161,"E","Remember ______ your passport before the trip.",["bringing","bring","to bring","brought"],2,"remember + to V = nhớ phải làm gì."],
+[162,"E","He tried ______ the heavy equipment, but it was too difficult.",["moving","move","to move","moved"],2,"try + to V = cố gắng làm gì."],
+[163,"E","Try ______ the sentence aloud to improve your pronunciation.",["reading","to read","read","reads"],0,"try + V-ing = thử làm gì."],
+[164,"E","I regret ______ so much time memorizing words without understanding them.",["spending","to spend","spend","spent"],0,"regret + V-ing = hối tiếc việc đã làm trong quá khứ."],
+[165,"E","We regret ______ you that the flight has been cancelled.",["informing","inform","to inform","informed"],2,"regret + to V = lấy làm tiếc khi phải thông báo."],
+[166,"E","The students were made ______ the test again.",["taking","take","to take","took"],2,"Câu bị động của make: be made + to V."],
+[167,"E","The teacher had the students ______ the new technique.",["practise","practising","to practise","practised"],0,"have + somebody + V (nguyên thể không to)."],
+[168,"E","She suggested ______ an alternative form of assessment.",["use","to use","using","used"],2,"suggest + V-ing."],
+[169,"E","He wants to continue ______ films about Vietnamese culture.",["make","making","to making","made"],1,"continue + V-ing."],
+[170,"E","The students avoided ______ during the examination.",["talking","to talk","talk","talked"],0,"avoid + V-ing."],
+[171,"E","The director expected the actors ______ the scene perfectly.",["perform","performing","to perform","performed"],2,"expect + somebody + to V."],
+[172,"E","We are considering ______ our accommodation before the holiday.",["book","booking","to book","booked"],1,"consider + V-ing."],
+[173,"E","He promised ______ the production team about the change.",["informing","inform","to inform","informed"],2,"promise + to V."],
+[174,"E","The film inspired young people ______ more about filmmaking.",["learning","learn","to learn","learned"],2,"inspire + somebody + to V."],
+[175,"E","By ______ the structure carefully, students can write better essays.",["understand","understanding","to understand","understood"],1,"Sau giới từ by dùng V-ing."],
+[176,"E","The director went on ______ the character in greater detail.",["explain","explaining","to explain","explained"],2,"go on + to V = tiếp tục làm việc gì tiếp theo."]
+];
+
+/* =========================================================
+   3. UNIT / CHAPTER ASSIGNMENT
+   ========================================================= */
+function unitChapterOf(id){
+  /* Part E: 20 câu trải đều 6 chương (4-3-3-3-3-4) */
+  if(id>=157 && id<=176){
+    if(id<=160) return [1,1];
+    if(id<=163) return [1,2];
+    if(id<=166) return [2,1];
+    if(id<=169) return [2,2];
+    if(id<=172) return [3,1];
+    return [3,2];
+  }
+  let i;
+  if(id<=42) i=Math.floor((id-1)/7);
+  else if(id<=90) i=Math.floor((id-43)/8);
+  else if(id<=110) i=Math.min(5,Math.floor((id-91)/3));
+  else if(id<=156) i=Math.floor((id-111)/8);
+  else i=0;
+  return [Math.floor(i/2)+1, i%2+1];
+}
+
+const PARTS = {A:"Word Form",B:"Vocabulary in Context",C:"Mixed Vocabulary",D:"Verb Forms",E:"Mixed Verb Forms"};
+
+const QUESTIONS = RAWQ.map(function(r){
+  const id=r[0], part=r[1], question=r[2], options=r[3], answer=r[4], explanation=r[5];
+  const uc = unitChapterOf(id);
+  return {id:id, part:part, unit:uc[0], chapter:uc[1], question:question, options:options.slice(), answer:answer, explanation:explanation};
+});
+
+function getQ(id){ for(let i=0;i<QUESTIONS.length;i++){ if(QUESTIONS[i].id===id) return QUESTIONS[i]; } return null; }
+
+/* =========================================================
+   4. STORAGE
+   ========================================================= */
+const KEY="engVocabApp_v1";
+function defaultStore(){
+  return {
+    favorites:[], mastered:[], flash:{},
+    qStats:{}, mistakes:{},
+    practiceHistory:[], testHistory:[],
+    lastStudy:null, theme:"light"
+  };
+}
+let store = defaultStore();
+try{
+  const raw = localStorage.getItem(KEY);
+  if(raw){ store = Object.assign(defaultStore(), JSON.parse(raw)); }
+}catch(e){}
+function save(){
+  try{ localStorage.setItem(KEY, JSON.stringify(store)); }catch(e){}
+}
+function todayStr(){
+  const d=new Date();
+  return String(d.getDate()).padStart(2,"0")+"/"+String(d.getMonth()+1).padStart(2,"0")+"/"+d.getFullYear();
+}
+function nowStr(){
+  const d=new Date();
+  return todayStr()+" "+String(d.getHours()).padStart(2,"0")+":"+String(d.getMinutes()).padStart(2,"0");
+}
+
+/* =========================================================
+   5. HELPERS
+   ========================================================= */
+function esc(s){
+  return String(s).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;");
+}
+function shuffle(a){
+  const arr=a.slice();
+  for(let i=arr.length-1;i>0;i--){
+    const j=Math.floor(Math.random()*(i+1));
+    const t=arr[i]; arr[i]=arr[j]; arr[j]=t;
+  }
+  return arr;
+}
+function shuffleOptions(q){
+  const idxs = q.options.map(function(_,i){return i;});
+  const sh = shuffle(idxs);
+  const newOpts = sh.map(function(i){ return q.options[i]; });
+  const newAnswer = sh.indexOf(q.answer);
+  return Object.assign({}, q, {options:newOpts, answer:newAnswer});
+}
+function letterOf(i){ return "ABCD"[i]; }
+function pct(a,b){ return b>0 ? ((a/b)*100).toFixed(1) : "0.0"; }
+function fmtTime(sec){
+  sec=Math.max(0,Math.floor(sec));
+  const m=Math.floor(sec/60), s=sec%60;
+  return String(m).padStart(2,"0")+":"+String(s).padStart(2,"0");
+}
+
+/* =========================================================
+   6. GLOBAL APP STATE
+   ========================================================= */
+const state = { view:"dashboard" };
+let session = null;
+let timerId = null;
+
+let vocabFilter = {search:"", unit:"all", chapter:"all"};
+let flashFilter = {unit:"all", chapter:"all"};
+let flash = {deck:[], idx:0, flipped:false, weak:false};
+
+/* =========================================================
+   7. NAVIGATION
+   ========================================================= */
+document.getElementById("nav").addEventListener("click", function(e){
+  const item = e.target.closest(".nav-item");
+  if(!item) return;
+  go(item.dataset.view);
+});
+
+function go(view){
+  if(timerId){ clearInterval(timerId); timerId=null; }
+  state.view = view;
+  if(view!=="practice" && session && session.mode==="practice") session=null;
+  if(view!=="test" && session && session.mode==="test") session=null;
+  if(view==="flashcards"){ buildFlashDeck(); }
+  render();
+  window.scrollTo(0,0);
+}
+
+function render(){
+  const el = document.getElementById("view");
+  let html = "";
+  switch(state.view){
+    case "dashboard": html = viewDashboard(); break;
+    case "vocab": html = viewVocab(); break;
+    case "flashcards": html = viewFlashcards(); break;
+    case "practice": html = viewPractice(); break;
+    case "test": html = viewTest(); break;
+    case "progress": html = viewProgress(); break;
+    case "mistakes": html = viewMistakes(); break;
+    case "favorites": html = viewFavorites(); break;
+    case "settings": html = viewSettings(); break;
+  }
+  el.innerHTML = html;
+
+  document.querySelectorAll("#nav .nav-item").forEach(function(n){
+    n.classList.toggle("active", n.dataset.view === state.view);
+  });
+
+  if(state.view==="vocab"){
+    const s=document.getElementById("vSearch");
+    const u=document.getElementById("vUnit");
+    const c=document.getElementById("vChapter");
+    if(s) s.addEventListener("input", applyVocabFilter);
+    if(u) u.addEventListener("change", applyVocabFilter);
+    if(c) c.addEventListener("change", applyVocabFilter);
+  }
+  if(state.view==="flashcards"){
+    const u=document.getElementById("fUnit");
+    const c=document.getElementById("fChapter");
+    if(u) u.addEventListener("change", function(){
+      flash.weak=false;
+      flashFilter.unit=u.value; flashFilter.chapter=c.value;
+      buildFlashDeck(); render();
+    });
+    if(c) c.addEventListener("change", function(){
+      flash.weak=false;
+      flashFilter.unit=u.value; flashFilter.chapter=c.value;
+      buildFlashDeck(); render();
+    });
+  }
+}
+
+/* =========================================================
+   8. STATS HELPERS
+   ========================================================= */
+function totalAttempts(){
+  let t=0; for(const k in store.qStats) t += store.qStats[k].a||0; return t;
+}
+function totalCorrect(){
+  let t=0; for(const k in store.qStats) t += store.qStats[k].c||0; return t;
+}
+function mistakeCount(){ return Object.keys(store.mistakes).length; }
+function flashKnownCount(){
+  let n=0; for(const k in store.flash){ if(store.flash[k]==="known") n++; } return n;
+}
+function unitVocabProgress(unit){
+  const list = VOCAB.filter(function(v){ return v.unit===unit; });
+  const done = list.filter(function(v){ return store.mastered.indexOf(v.w)>=0; }).length;
+  return {done:done, total:list.length};
+}
+function unitQuestionProgress(unit){
+  let att=0, cor=0, tot=0;
+  QUESTIONS.forEach(function(q){
+    if(q.unit!==unit) return;
+    tot++;
+    const st = store.qStats[q.id];
+    if(st){ att += st.a||0; cor += st.c||0; }
+  });
+  return {attempted:att, correct:cor, total:tot};
+}
+
+/* =========================================================
+   9. DASHBOARD
+   ========================================================= */
+function viewDashboard(){
+  const mastered = store.mastered.length;
+  const known = flashKnownCount();
+  const att = totalAttempts();
+  const cor = totalCorrect();
+  const acc = pct(cor, att);
+  const mist = mistakeCount();
+  return ''+
+  '<h1>Vocabulary Unit 1–3</h1>'+
+  '<p class="sub">48 Words · 176 Exercises · B1–B2</p>'+
+  '<div class="stats-row">'+
+    '<div class="stat"><div class="stat-num">'+known+'/48</div><div class="stat-lbl">Flashcards known</div></div>'+
+    '<div class="stat"><div class="stat-num">'+mastered+'/48</div><div class="stat-lbl">Words mastered</div></div>'+
+    '<div class="stat"><div class="stat-num">'+att+'</div><div class="stat-lbl">Practice attempts</div></div>'+
+    '<div class="stat"><div class="stat-num">'+acc+'%</div><div class="stat-lbl">Practice accuracy</div></div>'+
+    '<div class="stat"><div class="stat-num">'+mist+'</div><div class="stat-lbl">Questions to review</div></div>'+
+  '</div>'+
+  '<div class="cards">'+
+    card("vocab","📚","Vocabulary","Study all 48 words of Unit 1–3", mastered+" / 48 mastered")+
+    card("flashcards","🃏","Flashcards","Review 48 vocabulary cards", known+" / 48 known")+
+    card("practice","✏️","Practice","Practise all 176 exercises with explanations", att+" answered")+
+    card("test","📝","Test","Timed test with score & breakdown", store.testHistory.length+" tests taken")+
+    card("progress","📊","Progress","Track vocabulary, practice & tests", acc+"% accuracy")+
+    card("mistakes","❌","Mistakes","Review the questions you got wrong", mist+" questions")+
+  '</div>';
+}
+function card(view,ic,title,desc,mini){
+  return '<div class="card" onclick="go(\''+view+'\')">'+
+    '<div class="ic">'+ic+'</div>'+
+    '<h3>'+title+'</h3>'+
+    '<p>'+desc+'</p>'+
+    '<div class="mini">'+mini+'</div>'+
+  '</div>';
+}
+
+/* =========================================================
+   10. VOCABULARY VIEW
+   ========================================================= */
+function vocabSearchBlob(v){
+  return (v.w+" "+v.ipa+" "+v.pos+" "+v.mean+" "+v.def+" "+v.ex+" unit "+v.unit+" chapter "+v.chapter).toLowerCase();
+}
+function viewVocab(){
+  let html = ''+
+  '<h1>📚 Vocabulary</h1>'+
+  '<p class="sub">48 words · Unit 1–3 · Chapter 1–2</p>'+
+  '<div class="toolbar">'+
+    '<input type="text" id="vSearch" placeholder="🔍 Search vocabulary...">'+
+    '<select id="vUnit">'+
+      '<option value="all">All Units</option>'+
+      '<option value="1">Unit 1</option>'+
+      '<option value="2">Unit 2</option>'+
+      '<option value="3">Unit 3</option>'+
+    '</select>'+
+    '<select id="vChapter">'+
+      '<option value="all">All Chapters</option>'+
+      '<option value="1">Chapter 1</option>'+
+      '<option value="2">Chapter 2</option>'+
+    '</select>'+
+  '</div>'+
+  '<div class="v-grid" id="vGrid">';
+  VOCAB.forEach(function(v){
+    const fav = store.favorites.indexOf(v.w)>=0;
+    const mas = store.mastered.indexOf(v.w)>=0;
+    html += '<div class="v-card" data-search="'+esc(vocabSearchBlob(v))+'" data-unit="'+v.unit+'" data-chapter="'+v.chapter+'">'+
+      '<div class="v-head">'+
+        '<div><span class="v-word">'+esc(v.w)+'</span><span class="v-ipa">'+esc(v.ipa)+'</span><span class="v-pos">'+esc(v.pos)+'</span></div>'+
+        '<div class="v-actions">'+
+          '<button class="icon-btn '+(fav?"on":"")+'" title="Favorite" onclick="toggleFav(\''+esc(v.w)+'\')">'+(fav?"★":"☆")+'</button>'+
+          '<button class="icon-btn '+(mas?"ok-on":"")+'" title="Mastered" onclick="toggleMastered(\''+esc(v.w)+'\')">✓</button>'+
+        '</div>'+
+      '</div>'+
+      '<div class="v-mean">'+esc(v.mean)+'</div>'+
+      '<div class="v-def">'+esc(v.def)+'</div>'+
+      '<div class="v-ex">“'+esc(v.ex)+'”</div>'+
+      '<div class="v-tag">Unit '+v.unit+' · Chapter '+v.chapter+'</div>'+
+    '</div>';
+  });
+  html += '</div>';
+  return html;
+}
+function applyVocabFilter(){
+  const sEl = document.getElementById("vSearch");
+  const uEl = document.getElementById("vUnit");
+  const cEl = document.getElementById("vChapter");
+  const s = (sEl? sEl.value : "").trim().toLowerCase();
+  const u = uEl? uEl.value : "all";
+  const c = cEl? cEl.value : "all";
+  document.querySelectorAll("#vGrid .v-card").forEach(function(el){
+    const okS = !s || el.dataset.search.indexOf(s)>=0;
+    const okU = (u==="all") || (el.dataset.unit===u);
+    const okC = (c==="all") || (el.dataset.chapter===c);
+    el.style.display = (okS && okU && okC) ? "" : "none";
+  });
+}
+function toggleFav(w){
+  const i = store.favorites.indexOf(w);
+  if(i>=0) store.favorites.splice(i,1); else store.favorites.push(w);
+  store.lastStudy = nowStr();
+  save();
+  render();
+}
+function toggleMastered(w){
+  const i = store.mastered.indexOf(w);
+  if(i>=0) store.mastered.splice(i,1); else store.mastered.push(w);
+  store.lastStudy = nowStr();
+  save();
+  render();
+}
+
+/* =========================================================
+   11. FAVORITES VIEW
+   ========================================================= */
+function viewFavorites(){
+  const list = VOCAB.filter(function(v){ return store.favorites.indexOf(v.w)>=0; });
+  if(!list.length){
+    return '<h1>⭐ Favorites</h1><p class="sub">Những từ bạn đánh dấu yêu thích sẽ xuất hiện ở đây.</p>'+
+      '<div class="empty"><span class="ic">☆</span>Chưa có từ nào được đánh dấu yêu thích.</div>';
+  }
+  let html = '<h1>⭐ Favorites</h1><p class="sub">'+list.length+' từ đã đánh dấu</p><div class="v-grid">';
+  list.forEach(function(v){
+    const mas = store.mastered.indexOf(v.w)>=0;
+    html += '<div class="v-card">'+
+      '<div class="v-head">'+
+        '<div><span class="v-word">'+esc(v.w)+'</span><span class="v-ipa">'+esc(v.ipa)+'</span><span class="v-pos">'+esc(v.pos)+'</span></div>'+
+        '<div class="v-actions">'+
+          '<button class="icon-btn on" onclick="toggleFav(\''+esc(v.w)+'\')">★</button>'+
+          '<button class="icon-btn '+(mas?"ok-on":"")+'" onclick="toggleMastered(\''+esc(v.w)+'\')">✓</button>'+
+        '</div>'+
+      '</div>'+
+      '<div class="v-mean">'+esc(v.mean)+'</div>'+
+      '<div class="v-def">'+esc(v.def)+'</div>'+
+      '<div class="v-ex">“'+esc(v.ex)+'”</div>'+
+      '<div class="v-tag">Unit '+v.unit+' · Chapter '+v.chapter+'</div>'+
+    '</div>';
+  });
+  html += '</div>';
+  return html;
+}
+
+/* =========================================================
+   12. FLASHCARDS
+   ========================================================= */
+function buildFlashDeck(){
+  let list;
+  if(flash.weak){
+    list = VOCAB.filter(function(v){ return store.flash[v.w] !== "known"; });
+    if(!list.length) list = VOCAB.slice();
+  }else{
+    list = VOCAB.filter(function(v){
+      const okU = (flashFilter.unit==="all") || (String(v.unit)===flashFilter.unit);
+      const okC = (flashFilter.chapter==="all") || (String(v.chapter)===flashFilter.chapter);
+      return okU && okC;
+    });
+    if(!list.length) list = VOCAB.slice();
+  }
+  flash.deck = list;
+  flash.idx = 0;
+  flash.flipped = false;
+}
+
+function viewFlashcards(){
+  if(!flash.deck.length) buildFlashDeck();
+  const total = flash.deck.length;
+  if(flash.idx >= total) flash.idx = total-1;
+  if(flash.idx < 0) flash.idx = 0;
+  const v = flash.deck[flash.idx];
+  const knownCount = flash.deck.filter(function(x){ return store.flash[x.w]==="known"; }).length;
+
+  let html = ''+
+  '<h1>🃏 Flashcards</h1>'+
+  '<p class="sub">Click vào thẻ để lật xem nghĩa · '+knownCount+' / '+total+' đã nhớ</p>'+
+  '<div class="toolbar">'+
+    '<select id="fUnit">'+
+      '<option value="all"'+(flashFilter.unit==="all"?" selected":"")+'>All Units</option>'+
+      '<option value="1"'+(flashFilter.unit==="1"?" selected":"")+'>Unit 1</option>'+
+      '<option value="2"'+(flashFilter.unit==="2"?" selected":"")+'>Unit 2</option>'+
+      '<option value="3"'+(flashFilter.unit==="3"?" selected":"")+'>Unit 3</option>'+
+    '</select>'+
+    '<select id="fChapter">'+
+      '<option value="all"'+(flashFilter.chapter==="all"?" selected":"")+'>All Chapters</option>'+
+      '<option value="1"'+(flashFilter.chapter==="1"?" selected":"")+'>Chapter 1</option>'+
+      '<option value="2"'+(flashFilter.chapter==="2"?" selected":"")+'>Chapter 2</option>'+
+    '</select>'+
+    '<button class="btn gray" onclick="flashShuffle()">🔀 Shuffle</button>'+
+    '<button class="btn gray" onclick="flashRestart()">↺ Restart</button>'+
+    '<button class="btn ghost" onclick="flashWeak()">🔄 Review Weak Words</button>'+
+  '</div>'+
+  '<div class="bar" style="margin-bottom:18px"><i style="width:'+pct(knownCount,total)+'%"></i></div>'+
+  '<div class="fc-scene">'+
+    '<div class="fc'+(flash.flipped?" flipped":"")+'" id="fcCard" onclick="flashFlip()">'+
+      '<div class="fc-face front">'+
+        '<div class="fc-word">'+esc(v.w)+'</div>'+
+        '<div class="fc-ipa">'+esc(v.ipa)+'</div>'+
+        '<div class="fc-pos">'+esc(v.pos)+'</div>'+
+        '<div class="fc-hint">Click để lật thẻ</div>'+
+      '</div>'+
+      '<div class="fc-face back">'+
+        '<div class="fc-mean">'+esc(v.mean)+'</div>'+
+        '<div class="fc-def">'+esc(v.def)+'</div>'+
+        '<div class="fc-ex">“'+esc(v.ex)+'”</div>'+
+        '<div class="fc-tag" style="margin-top:8px"><span class="pill">Unit '+v.unit+' · Chapter '+v.chapter+'</span></div>'+
+      '</div>'+
+    '</div>'+
+  '</div>'+
+  '<div class="btn-row" style="justify-content:center;margin-top:22px">'+
+    '<button class="btn gray" onclick="flashPrev()">← Previous</button>'+
+    '<button class="btn ok" onclick="flashAnswer(\'known\')">✓ I know</button>'+
+    '<button class="btn bad" onclick="flashAnswer(\'unknown\')">✕ I don\'t know</button>'+
+    '<button class="btn gray" onclick="flashNext()">Next →</button>'+
+  '</div>'+
+  '<p class="muted" style="text-align:center;margin-top:14px">Card '+(flash.idx+1)+' / '+total+' · '+pct(knownCount,total)+'% mastered</p>';
+  return html;
+}
+function flashFlip(){
+  flash.flipped = !flash.flipped;
+  const el = document.getElementById("fcCard");
+  if(el) el.classList.toggle("flipped", flash.flipped);
+}
+function flashNext(){
+  if(flash.idx < flash.deck.length-1){ flash.idx++; flash.flipped=false; }
+  else { flash.idx = 0; flash.flipped = false; }
+  render();
+}
+function flashPrev(){
+  if(flash.idx > 0) flash.idx--; else flash.idx = flash.deck.length-1;
+  flash.flipped = false;
+  render();
+}
+function flashShuffle(){
+  flash.deck = shuffle(flash.deck);
+  flash.idx = 0; flash.flipped = false;
+  render();
+}
+function flashRestart(){
+  flash.idx = 0; flash.flipped = false;
+  render();
+}
+function flashWeak(){
+  flash.weak = true;
+  buildFlashDeck();
+  render();
+}
+function flashAnswer(kind){
+  const w = flash.deck[flash.idx].w;
+  store.flash[w] = (kind==="known") ? "known" : "unknown";
+  if(kind==="known"){
+    if(store.mastered.indexOf(w)<0) store.mastered.push(w);
+  }else{
+    const i = store.mastered.indexOf(w);
+    if(i>=0) store.mastered.splice(i,1);
+  }
+  store.lastStudy = nowStr();
+  save();
+  flashNext();
+}
+
+/* =========================================================
+   13. PRACTICE
+   ========================================================= */
+function practiceSetupHTML(){
+  return ''+
+  '<h1>✏️ Practice</h1>'+
+  '<p class="sub">176 exercises · Part A–E · Đáp án được ẩn cho tới khi bạn trả lời</p>'+
+  '<div class="panel">'+
+    '<h3>Chọn phạm vi luyện tập</h3>'+
+    '<div class="btn-row">'+
+      '<button class="btn" onclick="startPractice(\'all\')">🎯 All Practice (176)</button>'+
+    '</div>'+
+    '<hr>'+
+    '<h3>By Part</h3>'+
+    '<div class="btn-row">'+
+      '<button class="btn gray" onclick="startPractice(\'part:A\')">Part A — Word Form (42)</button>'+
+      '<button class="btn gray" onclick="startPractice(\'part:B\')">Part B — Vocabulary in Context (48)</button>'+
+      '<button class="btn gray" onclick="startPractice(\'part:C\')">Part C — Mixed Vocabulary (20)</button>'+
+      '<button class="btn gray" onclick="startPractice(\'part:D\')">Part D — Verb Forms (46)</button>'+
+      '<button class="btn gray" onclick="startPractice(\'part:E\')">Part E — Mixed Verb Forms (20)</button>'+
+    '</div>'+
+    '<hr>'+
+    '<h3>By Unit</h3>'+
+    '<div class="btn-row">'+
+      '<button class="btn gray" onclick="startPractice(\'unit:1\')">Unit 1</button>'+
+      '<button class="btn gray" onclick="startPractice(\'unit:2\')">Unit 2</button>'+
+      '<button class="btn gray" onclick="startPractice(\'unit:3\')">Unit 3</button>'+
+    '</div>'+
+    '<hr>'+
+    '<h3>By Chapter</h3>'+
+    '<div class="btn-row">'+
+      '<button class="btn gray" onclick="startPractice(\'chapter:1:1\')">Unit 1 · Ch 1</button>'+
+      '<button class="btn gray" onclick="startPractice(\'chapter:1:2\')">Unit 1 · Ch 2</button>'+
+      '<button class="btn gray" onclick="startPractice(\'chapter:2:1\')">Unit 2 · Ch 1</button>'+
+      '<button class="btn gray" onclick="startPractice(\'chapter:2:2\')">Unit 2 · Ch 2</button>'+
+      '<button class="btn gray" onclick="startPractice(\'chapter:3:1\')">Unit 3 · Ch 1</button>'+
+      '<button class="btn gray" onclick="startPractice(\'chapter:3:2\')">Unit 3 · Ch 2</button>'+
+    '</div>'+
+    '<hr>'+
+    '<h3>Mistakes</h3>'+
+    '<div class="btn-row">'+
+      '<button class="btn bad" onclick="startPractice(\'mistakes\')">❌ Mistakes Only ('+mistakeCount()+')</button>'+
+    '</div>'+
+  '</div>';
+}
+
+function labelForScope(scope){
+  if(scope==="all") return "All Practice";
+  if(scope==="mistakes") return "Mistakes Only";
+  if(scope.indexOf("part:")===0) return "Part "+scope.split(":")[1]+" — "+PARTS[scope.split(":")[1]];
+  if(scope.indexOf("unit:")===0) return "Unit "+scope.split(":")[1];
+  if(scope.indexOf("chapter:")===0){ const a=scope.split(":"); return "Unit "+a[1]+" · Chapter "+a[2]; }
+  return scope;
+}
+
+function startPractice(scope){
+  let list = QUESTIONS.slice();
+  if(scope==="mistakes"){
+    list = list.filter(function(q){ return store.mistakes[q.id]; });
+  }else if(scope.indexOf("part:")===0){
+    const p = scope.split(":")[1];
+    list = list.filter(function(q){ return q.part===p; });
+  }else if(scope.indexOf("unit:")===0){
+    const u = Number(scope.split(":")[1]);
+    list = list.filter(function(q){ return q.unit===u; });
+  }else if(scope.indexOf("chapter:")===0){
+    const a = scope.split(":");
+    const u = Number(a[1]), c = Number(a[2]);
+    list = list.filter(function(q){ return q.unit===u && q.chapter===c; });
+  }
+  if(!list.length){ alert("Không có câu hỏi nào phù hợp với lựa chọn này."); return; }
+  const prepared = shuffle(list).map(shuffleOptions);
+  session = {
+    mode:"practice", scope:scope, label:labelForScope(scope),
+    list:prepared, idx:0, answers:{}, start:Date.now(), done:false
+  };
+  render();
+  window.scrollTo(0,0);
+}
+
+function viewPractice(){
+  if(!session || session.mode!=="practice") return practiceSetupHTML();
+  if(session.done) return practiceResultHTML();
+
+  const q = session.list[session.idx];
+  const chosen = session.answers[q.id];
+  const answered = (chosen !== undefined);
+  const n = session.list.length;
+
+  let html = ''+
+  '<h1>✏️ Practice</h1>'+
+  '<p class="sub">'+esc(session.label)+'</p>'+
+  '<div class="q-wrap">'+
+    '<div class="q-top">'+
+      '<span>Question '+(session.idx+1)+' / '+n+'</span>'+
+      '<span><span class="pill">Part '+q.part+' · '+PARTS[q.part]+'</span> <span class="pill">Unit '+q.unit+' · Ch '+q.chapter+'</span></span>'+
+    '</div>'+
+    '<div class="bar"><i style="width:'+((session.idx)/n*100).toFixed(1)+'%"></i></div>'+
+    '<div class="q-text">'+esc(q.question)+'</div>';
+
+  q.options.forEach(function(op,i){
+    let cls = "opt";
+    if(answered){
+      if(i===q.answer) cls += " correct";
+      else if(i===chosen) cls += " wrong";
+      else cls += " dim";
+    }
+    html += '<button class="'+cls+'" '+(answered?"disabled":"")+' onclick="answerPractice('+i+')">'+
+      '<span class="key">'+letterOf(i)+'</span><span>'+esc(op)+'</span></button>';
+  });
+
+  if(answered){
+    if(chosen===q.answer){
+      html += '<div class="fb ok">🟢 Correct!<div class="exp"><strong>Giải thích:</strong> '+esc(q.explanation)+'</div></div>';
+    }else{
+      html += '<div class="fb no">🔴 Incorrect<br><strong>Correct answer:</strong> '+letterOf(q.answer)+'. '+esc(q.options[q.answer])+
+        '<div class="exp"><strong>Giải thích:</strong> '+esc(q.explanation)+'</div></div>';
+    }
+    html += '<div class="btn-row">'+
+      (session.idx < n-1
+        ? '<button class="btn" onclick="nextPractice()">Next Question →</button>'
+        : '<button class="btn" onclick="finishPractice()">Xem kết quả 🎉</button>')+
+      '<button class="btn gray" onclick="quitPractice()">Thoát</button>'+
+    '</div>';
+  }else{
+    html += '<div class="btn-row"><button class="btn gray" onclick="quitPractice()">Thoát</button></div>';
+  }
+
+  html += '</div>';
+  return html;
+}
+
+function answerPractice(i){
+  if(!session || session.mode!=="practice" || session.done) return;
+  const q = session.list[session.idx];
+  if(session.answers[q.id] !== undefined) return;
+  session.answers[q.id] = i;
+  recordAnswer(q, i);
+  render();
+}
+
+function nextPractice(){
+  if(!session) return;
+  if(session.idx < session.list.length-1){ session.idx++; render(); window.scrollTo(0,0); }
+  else finishPractice();
+}
+
+function finishPractice(){
+  if(!session) return;
+  session.done = true;
+  let cor=0, wr=0;
+  session.list.forEach(function(q){
+    const a = session.answers[q.id];
+    if(a === undefined) return;
+    if(a===q.answer) cor++; else wr++;
+  });
+  const unanswered = session.list.length - cor - wr;
+  store.practiceHistory.unshift({
+    date: nowStr(), label: session.label, total: session.list.length,
+    correct: cor, wrong: wr, unanswered: unanswered,
+    accuracy: pct(cor, session.list.length)
+  });
+  if(store.practiceHistory.length>60) store.practiceHistory.length = 60;
+  store.lastStudy = nowStr();
+  save();
+  render();
+  window.scrollTo(0,0);
+}
+
+function quitPractice(){
+  session = null;
+  render();
+}
+
+function recordAnswer(q, chosen){
+  if(!store.qStats[q.id]) store.qStats[q.id] = {a:0, c:0};
+  store.qStats[q.id].a++;
+  const correct = (chosen === q.answer);
+  if(correct){
+    store.qStats[q.id].c++;
+    if(store.mistakes[q.id]){
+      store.mistakes[q.id].ok = (store.mistakes[q.id].ok||0)+1;
+      if(store.mistakes[q.id].ok >= 2) delete store.mistakes[q.id];
+    }
+  }else{
+    const m = store.mistakes[q.id] || {times:0, ok:0};
+    m.times = (m.times||0)+1;
+    m.ok = 0;
+    m.last = nowStr();
+    m.userAns = q.options[chosen];
+    m.correctAns = q.options[q.answer];
+    m.letter = letterOf(q.answer);
+    store.mistakes[q.id] = m;
+  }
+  store.lastStudy = nowStr();
+  save();
+}
+
+function practiceResultHTML(){
+  let cor=0, wr=0;
+  session.list.forEach(function(q){
+    const a = session.answers[q.id];
+    if(a===undefined) return;
+    if(a===q.answer) cor++; else wr++;
+  });
+  const tot = session.list.length;
+  const unanswered = tot - cor - wr;
+
+  let html = ''+
+  '<h1>🎉 Practice Complete!</h1>'+
+  '<p class="sub">'+esc(session.label)+'</p>'+
+  '<div class="score-hero">'+
+    '<div class="score-big">'+cor+' / '+tot+'</div>'+
+    '<p class="muted" style="margin-top:6px">Accuracy: '+pct(cor,tot)+'%</p>'+
+    '<div class="stats-row" style="margin-top:18px">'+
+      '<div class="stat"><div class="stat-num">'+cor+'</div><div class="stat-lbl">Correct</div></div>'+
+      '<div class="stat"><div class="stat-num">'+wr+'</div><div class="stat-lbl">Wrong</div></div>'+
+      '<div class="stat"><div class="stat-num">'+unanswered+'</div><div class="stat-lbl">Unanswered</div></div>'+
+    '</div>'+
+    '<div class="btn-row" style="justify-content:center">'+
+      '<button class="btn" onclick="retryIncorrect()">🔁 Retry Incorrect Questions</button>'+
+      '<button class="btn ghost" onclick="startPractice(\''+session.scope+'\')">↺ Retry All</button>'+
+      '<button class="btn gray" onclick="go(\'dashboard\')">🏠 Dashboard</button>'+
+    '</div>'+
+  '</div>'+
+  '<h2>Review Answers</h2>';
+
+  session.list.forEach(function(q,i){
+    const a = session.answers[q.id];
+    const ok = (a===q.answer);
+    html += '<div class="review-item">'+
+      '<div class="qq"><span class="tag '+(ok?"ok":"no")+'">'+(ok?"Correct":"Wrong")+'</span>'+
+      'Q'+q.id+'. '+esc(q.question)+'</div>'+
+      '<div class="aa muted">Your answer: <strong>'+ (a===undefined? "—" : letterOf(a)+". "+esc(q.options[a])) +'</strong></div>'+
+      (ok? "" : '<div class="aa muted">Correct answer: <strong>'+letterOf(q.answer)+'. '+esc(q.options[q.answer])+'</strong></div>')+
+      '<div class="aa">💡 '+esc(q.explanation)+'</div>'+
+    '</div>';
+  });
+
+  return html;
+}
+
+function retryIncorrect(){
+  if(!session) return;
+  const wrong = session.list.filter(function(q){
+    const a = session.answers[q.id];
+    return a===undefined || a!==q.answer;
+  });
+  if(!wrong.length){ alert("Bạn không có câu nào sai. Tuyệt vời!"); return; }
+  const prepared = shuffle(wrong).map(function(q){
+    return Object.assign({}, shuffleOptions(q));
+  });
+  session = {
+    mode:"practice", scope:session.scope, label:"Retry — "+session.label,
+    list:prepared, idx:0, answers:{}, start:Date.now(), done:false
+  };
+  render();
+  window.scrollTo(0,0);
+}
+
+/* =========================================================
+   14. TEST MODE
+   ========================================================= */
+function testSetupHTML(){
+  return ''+
+  '<h1>📝 Test Mode</h1>'+
+  '<p class="sub">Không hiển thị đáp án trong khi làm · Chấm điểm cuối bài · Có thể tính giờ</p>'+
+  '<div class="panel">'+
+    '<div class="field">'+
+      '<label class="title">Number of Questions</label>'+
+      '<select id="tCount">'+
+        '<option value="20">20</option>'+
+        '<option value="30">30</option>'+
+        '<option value="40">40</option>'+
+        '<option value="50" selected>50</option>'+
+        '<option value="60">60</option>'+
+        '<option value="100">100</option>'+
+        '<option value="176">176 (toàn bộ)</option>'+
+      '</select>'+
+    '</div>'+
+    '<div class="field">'+
+      '<label class="title">Question Types</label>'+
+      '<div class="chips">'+
+        '<label class="chip"><input type="checkbox" class="tType" value="A" checked> Part A — Word Form</label>'+
+        '<label class="chip"><input type="checkbox" class="tType" value="B" checked> Part B — Vocabulary in Context</label>'+
+        '<label class="chip"><input type="checkbox" class="tType" value="C" checked> Part C — Mixed Vocabulary</label>'+
+        '<label class="chip"><input type="checkbox" class="tType" value="D" checked> Part D — Verb Forms</label>'+
+        '<label class="chip"><input type="checkbox" class="tType" value="E" checked> Part E — Mixed Verb Forms</label>'+
+      '</div>'+
+    '</div>'+
+    '<div class="field">'+
+      '<label class="title">Units</label>'+
+      '<div class="chips">'+
+        '<label class="chip"><input type="checkbox" class="tUnit" value="1" checked> Unit 1</label>'+
+        '<label class="chip"><input type="checkbox" class="tUnit" value="2" checked> Unit 2</label>'+
+        '<label class="chip"><input type="checkbox" class="tUnit" value="3" checked> Unit 3</label>'+
+      '</div>'+
+    '</div>'+
+    '<div class="field">'+
+      '<label class="title">Time</label>'+
+      '<select id="tTime">'+
+        '<option value="0" selected>No time limit</option>'+
+        '<option value="15">15 minutes</option>'+
+        '<option value="30">30 minutes</option>'+
+        '<option value="45">45 minutes</option>'+
+        '<option value="60">60 minutes</option>'+
+      '</select>'+
+    '</div>'+
+    '<div class="btn-row">'+
+      '<button class="btn" onclick="startTest()">▶ Start Test</button>'+
+    '</div>'+
+  '</div>';
+}
+
+function startTest(){
+  const countEl = document.getElementById("tCount");
+  const timeEl = document.getElementById("tTime");
+  const count = Number(countEl.value);
+  const time = Number(timeEl.value);
+  let types = [];
+  document.querySelectorAll(".tType:checked").forEach(function(c){ types.push(c.value); });
+  let units = [];
+  document.querySelectorAll(".tUnit:checked").forEach(function(c){ units.push(Number(c.value)); });
+  if(!types.length) types = ["A","B","C","D","E"];
+  if(!units.length) units = [1,2,3];
+
+  let pool = QUESTIONS.filter(function(q){
+    return types.indexOf(q.part)>=0 && units.indexOf(q.unit)>=0;
+  });
+  if(!pool.length){ alert("Không có câu hỏi nào phù hợp."); return; }
+
+  pool = shuffle(pool);
+  const take = Math.min(count, pool.length);
+  let list = pool.slice(0, take).map(shuffleOptions);
+
+  session = {
+    mode:"test",
+    list:list, idx:0, answers:{}, start:Date.now(), done:false,
+    timeLimit: time>0 ? time : 0,
+    types: types, units: units, configCount: count
+  };
+  render();
+  window.scrollTo(0,0);
+  if(session.timeLimit>0){
+    if(timerId) clearInterval(timerId);
+    timerId = setInterval(tickTimer, 1000);
+  }
+}
+
+function tickTimer(){
+  if(!session || session.mode!=="test" || session.done){ if(timerId){clearInterval(timerId);timerId=null;} return; }
+  const elapsed = Math.floor((Date.now()-session.start)/1000);
+  const remain = session.timeLimit*60 - elapsed;
+  const el = document.getElementById("testTimer");
+  if(el) el.textContent = fmtTime(remain);
+  if(remain<=0){
+    if(timerId){ clearInterval(timerId); timerId=null; }
+    submitTest(true);
+  }
+}
+
+function viewTest(){
+  if(!session || session.mode!=="test") return testSetupHTML();
+  if(session.done) return testResultHTML();
+
+  const q = session.list[session.idx];
+  const chosen = session.answers[q.id];
+  const n = session.list.length;
+  const answeredCount = Object.keys(session.answers).length;
+
+  let html = ''+
+  '<h1>📝 Test</h1>'+
+  '<p class="sub">'+n+' câu · '+(session.timeLimit? ("Giới hạn "+session.timeLimit+" phút"):"Không giới hạn thời gian")+'</p>'+
+  '<div class="q-wrap">'+
+    '<div class="q-top">'+
+      '<span>Question '+(session.idx+1)+' / '+n+' · Đã trả lời: '+answeredCount+'</span>'+
+      '<span>'+(session.timeLimit? ('⏱ <strong id="testTimer">'+fmtTime(session.timeLimit*60-Math.floor((Date.now()-session.start)/1000))+'</strong>') : "")+'</span>'+
+    '</div>'+
+    '<div class="bar"><i style="width:'+((answeredCount/n)*100).toFixed(1)+'%"></i></div>'+
+    '<div class="q-text">'+esc(q.question)+'</div>';
+
+  q.options.forEach(function(op,i){
+    const cls = "opt" + (chosen===i ? " picked" : "");
+    html += '<button class="'+cls+'" onclick="answerTest('+i+')">'+
+      '<span class="key">'+letterOf(i)+'</span><span>'+esc(op)+'</span></button>';
+  });
+
+  html += '<div class="btn-row">'+
+    '<button class="btn gray" onclick="testPrev()" '+(session.idx===0?"disabled":"")+'>← Previous</button>'+
+    (session.idx < n-1
+      ? '<button class="btn" onclick="testNext()">Next →</button>'
+      : '<button class="btn ok" onclick="submitTest(false)">✅ Submit Test</button>')+
+    '<button class="btn ghost" onclick="submitTest(false)">Submit ngay</button>'+
+    '<button class="btn gray" onclick="quitTest()">Thoát</button>'+
+  '</div>';
+
+  html += '<div class="navigator">';
+  session.list.forEach(function(x,i){
+    const done = session.answers[x.id]!==undefined;
+    const cur = (i===session.idx);
+    html += '<button class="navdot '+(cur?"cur":(done?"done":""))+'" onclick="testGoto('+i+')">'+(i+1)+'</button>';
+  });
+  html += '</div>';
+
+  html += '</div>';
+  return html;
+}
+
+function answerTest(i){
+  if(!session || session.done) return;
+  session.answers[session.list[session.idx].id] = i;
+  render();
+}
+function testNext(){
+  if(session.idx < session.list.length-1){ session.idx++; render(); window.scrollTo(0,0); }
+}
+function testPrev(){
+  if(session.idx > 0){ session.idx--; render(); window.scrollTo(0,0); }
+}
+function testGoto(i){
+  session.idx = i; render(); window.scrollTo(0,0);
+}
+function quitTest(){
+  if(timerId){ clearInterval(timerId); timerId=null; }
+  session = null;
+  render();
+}
+
+function submitTest(auto){
+  if(!session || session.done) return;
+  if(!auto){
+    const answered = Object.keys(session.answers).length;
+    if(answered < session.list.length){
+      if(!confirm("Bạn còn "+(session.list.length-answered)+" câu chưa trả lời. Vẫn nộp bài?")) return;
+    }
+  }
+  if(timerId){ clearInterval(timerId); timerId=null; }
+  session.done = true;
+  session.endTime = Date.now();
+
+  let cor=0, wr=0, un=0;
+  const byPart = {};
+  session.list.forEach(function(q){
+    const a = session.answers[q.id];
+    if(!byPart[q.part]) byPart[q.part] = {c:0, t:0};
+    byPart[q.part].t++;
+    if(a===undefined){ un++; }
+    else if(a===q.answer){ cor++; byPart[q.part].c++; }
+    else { wr++; }
+    if(!store.qStats[q.id]) store.qStats[q.id] = {a:0,c:0};
+    store.qStats[q.id].a++;
+    if(a!==undefined && a===q.answer){
+      store.qStats[q.id].c++;
+      if(store.mistakes[q.id]){
+        store.mistakes[q.id].ok = (store.mistakes[q.id].ok||0)+1;
+        if(store.mistakes[q.id].ok>=2) delete store.mistakes[q.id];
+      }
+    }else if(a!==undefined){
+      const m = store.mistakes[q.id] || {times:0, ok:0};
+      m.times = (m.times||0)+1;
+      m.ok = 0;
+      m.last = nowStr();
+      m.userAns = q.options[a];
+      m.correctAns = q.options[q.answer];
+      m.letter = letterOf(q.answer);
+      store.mistakes[q.id] = m;
+    }
+  });
+
+  const total = session.list.length;
+  const timeUsed = Math.floor((session.endTime - session.start)/1000);
+  const record = {
+    date: nowStr(),
+    total: total, correct: cor, wrong: wr, unanswered: un,
+    percentage: pct(cor, total),
+    timeUsed: timeUsed,
+    timeLimit: session.timeLimit,
+    types: session.types.join(", "),
+    units: session.units.join(", "),
+    byPart: JSON.parse(JSON.stringify(byPart))
+  };
+  store.testHistory.unshift(record);
+  if(store.testHistory.length>40) store.testHistory.length = 40;
+  store.lastStudy = nowStr();
+  save();
+  render();
+  window.scrollTo(0,0);
+}
+
+function testResultHTML(){
+  const total = session.list.length;
+  let cor=0, wr=0, un=0;
+  const byPart = {};
+  session.list.forEach(function(q){
+    const a = session.answers[q.id];
+    if(!byPart[q.part]) byPart[q.part] = {c:0, t:0};
+    byPart[q.part].t++;
+    if(a===undefined) un++;
+    else if(a===q.answer){ cor++; byPart[q.part].c++; }
+    else wr++;
+  });
+  const timeUsed = session.endTime ? Math.floor((session.endTime-session.start)/1000) : 0;
+
+  let html = ''+
+  '<h1>📊 Test Result</h1>'+
+  '<p class="sub">Kết quả bài kiểm tra của bạn</p>'+
+  '<div class="score-hero">'+
+    '<div class="score-big">'+cor+' / '+total+'</div>'+
+    '<p class="muted" style="margin-top:6px">Percentage: <strong>'+pct(cor,total)+'%</strong></p>'+
+    '<div class="stats-row" style="margin-top:18px">'+
+      '<div class="stat"><div class="stat-num">'+cor+'</div><div class="stat-lbl">Correct</div></div>'+
+      '<div class="stat"><div class="stat-num">'+wr+'</div><div class="stat-lbl">Wrong</div></div>'+
+      '<div class="stat"><div class="stat-num">'+un+'</div><div class="stat-lbl">Unanswered</div></div>'+
+      '<div class="stat"><div class="stat-num">'+pct(cor,total)+'%</div><div class="stat-lbl">Accuracy</div></div>'+
+      '<div class="stat"><div class="stat-num">'+fmtTime(timeUsed)+'</div><div class="stat-lbl">Time used</div></div>'+
+    '</div>'+
+    '<div class="btn-row" style="justify-content:center">'+
+      '<button class="btn" onclick="reviewTestAnswers()">📖 Review Answers</button>'+
+      '<button class="btn ghost" onclick="retryTestWrong()">🔁 Retry Wrong Questions</button>'+
+      '<button class="btn gray" onclick="quitTest()">↩ New Test</button>'+
+      '<button class="btn gray" onclick="go(\'dashboard\')">🏠 Dashboard</button>'+
+    '</div>'+
+  '</div>'+
+  '<h2>By Question Type</h2>'+
+  '<table><thead><tr><th>Type</th><th class="num">Correct</th><th class="num">Total</th><th class="num">Accuracy</th></tr></thead><tbody>';
+
+  ["A","B","C","D","E"].forEach(function(p){
+    if(!byPart[p]) return;
+    html += '<tr><td>'+PARTS[p]+'</td><td class="num">'+byPart[p].c+'</td><td class="num">'+byPart[p].t+'</td><td class="num">'+pct(byPart[p].c, byPart[p].t)+'%</td></tr>';
+  });
+  html += '</tbody></table><div id="testReview"></div>';
+  return html;
+}
+
+function reviewTestAnswers(){
+  const el = document.getElementById("testReview");
+  if(!el) return;
+  if(el.dataset.open==="1"){ el.innerHTML=""; el.dataset.open="0"; return; }
+  let html = '<h2>Chi tiết đáp án</h2>';
+  session.list.forEach(function(q){
+    const a = session.answers[q.id];
+    const ok = (a===q.answer);
+    html += '<div class="review-item">'+
+      '<div class="qq"><span class="tag '+(ok?"ok":"no")+'">'+(ok?"Correct":(a===undefined?"Skipped":"Wrong"))+'</span>'+
+      'Q'+q.id+'. '+esc(q.question)+'</div>'+
+      '<div class="aa muted">Your answer: <strong>'+(a===undefined?"—":letterOf(a)+". "+esc(q.options[a]))+'</strong></div>'+
+      (ok?"":'<div class="aa muted">Correct answer: <strong>'+letterOf(q.answer)+'. '+esc(q.options[q.answer])+'</strong></div>')+
+      '<div class="aa">💡 '+esc(q.explanation)+'</div>'+
+    '</div>';
+  });
+  el.innerHTML = html;
+  el.dataset.open = "1";
+}
+
+function retryTestWrong(){
+  if(timerId){ clearInterval(timerId); timerId=null; }
+  const wrong = session.list.filter(function(q){
+    const a = session.answers[q.id];
+    return a===undefined || a!==q.answer;
+  });
+  if(!wrong.length){ alert("Không có câu sai để làm lại. Xuất sắc!"); return; }
+  const prepared = shuffle(wrong).map(shuffleOptions);
+  session = {
+    mode:"practice", scope:"all", label:"Retry Wrong (Test)",
+    list:prepared, idx:0, answers:{}, start:Date.now(), done:false
+  };
+  state.view = "practice";
+  render();
+  window.scrollTo(0,0);
+}
+
+/* =========================================================
+   15. PROGRESS VIEW
+   ========================================================= */
+function viewProgress(){
+  const mastered = store.mastered.length;
+  const att = totalAttempts(), cor = totalCorrect();
+
+  let html = ''+
+  '<h1>📊 My Progress</h1>'+
+  '<p class="sub">Tiến độ học tập được lưu tự động trên trình duyệt này</p>'+
+
+  '<h2>Vocabulary</h2>'+
+  '<div class="panel">'+
+    '<div class="muted">'+mastered+' / 48 mastered · '+flashKnownCount()+' flashcards known</div>'+
+    '<div class="bar" style="margin-top:10px"><i style="width:'+pct(mastered,48)+'%"></i></div>'+
+    '<p class="muted" style="margin-top:8px">'+pct(mastered,48)+'% hoàn thành</p>'+
+  '</div>'+
+
+  '<h2>Practice</h2>'+
+  '<div class="stats-row">'+
+    '<div class="stat"><div class="stat-num">'+att+'</div><div class="stat-lbl">Total attempts</div></div>'+
+    '<div class="stat"><div class="stat-num">'+cor+'</div><div class="stat-lbl">Correct</div></div>'+
+    '<div class="stat"><div class="stat-num">'+(att-cor)+'</div><div class="stat-lbl">Wrong</div></div>'+
+    '<div class="stat"><div class="stat-num">'+pct(cor,att)+'%</div><div class="stat-lbl">Accuracy</div></div>'+
+  '</div>'+
+
+  '<h2>Unit Progress</h2>'+
+  '<table><thead><tr><th>Unit</th><th class="num">Vocabulary</th><th class="num">Practice accuracy</th></tr></thead><tbody>';
+  [1,2,3].forEach(function(u){
+    const v = unitVocabProgress(u);
+    const p = unitQuestionProgress(u);
+    html += '<tr><td>Unit '+u+'</td><td class="num">'+pct(v.done,v.total)+'% ('+v.done+'/'+v.total+')</td>'+
+      '<td class="num">'+pct(p.correct, p.attempted)+'%</td></tr>';
+  });
+  html += '</tbody></table>';
+
+  html += '<h2>Test</h2>';
+  if(!store.testHistory.length){
+    html += '<div class="empty"><span class="ic">📝</span>Bạn chưa làm bài test nào.</div>';
+  }else{
+    const scores = store.testHistory.map(function(t){ return Number(t.percentage); });
+    const best = Math.max.apply(null, scores);
+    const avg = (scores.reduce(function(a,b){return a+b;},0)/scores.length).toFixed(1);
+    html += '<div class="stats-row">'+
+      '<div class="stat"><div class="stat-num">'+store.testHistory.length+'</div><div class="stat-lbl">Tests taken</div></div>'+
+      '<div class="stat"><div class="stat-num">'+best+'%</div><div class="stat-lbl">Highest score</div></div>'+
+      '<div class="stat"><div class="stat-num">'+avg+'%</div><div class="stat-lbl">Average score</div></div>'+
+    '</div>';
+    html += '<table><thead><tr><th>Date</th><th class="num">Score</th><th class="num">%</th><th class="num">Time</th></tr></thead><tbody>';
+    store.testHistory.slice(0,10).forEach(function(t){
+      html += '<tr><td>'+esc(t.date)+'</td><td class="num">'+t.correct+'/'+t.total+'</td><td class="num">'+t.percentage+'%</td><td class="num">'+fmtTime(t.timeUsed)+'</td></tr>';
+    });
+    html += '</tbody></table>';
+  }
+
+  html += '<h2>Practice History</h2>';
+  if(!store.practiceHistory.length){
+    html += '<div class="empty"><span class="ic">✏️</span>Chưa có lịch sử luyện tập.</div>';
+  }else{
+    html += '<table><thead><tr><th>Date</th><th>Scope</th><th class="num">Correct</th><th class="num">Total</th><th class="num">Accuracy</th></tr></thead><tbody>';
+    store.practiceHistory.slice(0,10).forEach(function(h){
+      html += '<tr><td>'+esc(h.date)+'</td><td>'+esc(h.label)+'</td><td class="num">'+h.correct+'</td><td class="num">'+h.total+'</td><td class="num">'+h.accuracy+'%</td></tr>';
+    });
+    html += '</tbody></table>';
+  }
+
+  if(store.lastStudy){
+    html += '<p class="muted" style="margin-top:24px">🕒 Lần học gần nhất: '+esc(store.lastStudy)+'</p>';
+  }
+  return html;
+}
+
+/* =========================================================
+   16. MISTAKES VIEW
+   ========================================================= */
+function viewMistakes(){
+  const ids = Object.keys(store.mistakes).map(Number).sort(function(a,b){ return a-b; });
+  let html = '<h1>❌ My Mistakes</h1><p class="sub">Những câu bạn trả lời sai sẽ được lưu lại tự động</p>';
+
+  if(!ids.length){
+    html += '<div class="empty"><span class="ic">🎯</span>Chưa có lỗi nào. Hãy luyện tập để hệ thống ghi nhận nhé!</div>';
+    return html;
+  }
+
+  html += '<div class="btn-row" style="margin-bottom:18px">'+
+    '<button class="btn bad" onclick="startPractice(\'mistakes\')">▶ Practice Mistakes ('+ids.length+')</button>'+
+  '</div>';
+
+  ids.forEach(function(id){
+    const q = getQ(id);
+    if(!q) return;
+    const m = store.mistakes[id];
+    html += '<div class="review-item">'+
+      '<div class="qq"><span class="tag no">Wrong ×'+m.times+'</span>Q'+q.id+'. '+esc(q.question)+'</div>'+
+      '<div class="aa muted">Your answer: <strong>'+esc(m.userAns||"—")+'</strong></div>'+
+      '<div class="aa muted">Correct answer: <strong>'+esc(m.correctAns||"—")+'</strong></div>'+
+      '<div class="aa">💡 '+esc(q.explanation)+'</div>'+
+      '<div class="muted" style="font-size:12px;margin-top:6px">Last attempted: '+esc(m.last||"")+' · <span class="pill">Part '+q.part+' · Unit '+q.unit+' · Ch '+q.chapter+'</span></div>'+
+    '</div>';
+  });
+  return html;
+}
+
+/* =========================================================
+   17. SETTINGS VIEW
+   ========================================================= */
+function viewSettings(){
+  const dark = store.theme==="dark";
+  return ''+
+  '<h1>⚙️ Settings</h1>'+
+  '<p class="sub">Tuỳ chỉnh giao diện và quản lý dữ liệu học tập</p>'+
+  '<div class="panel">'+
+    '<h3>Giao diện</h3>'+
+    '<div class="btn-row">'+
+      '<button class="btn '+(dark?"gray":"")+'" onclick="setTheme(\'light\')">☀️ Light mode</button>'+
+      '<button class="btn '+(dark?"":"gray")+'" onclick="setTheme(\'dark\')">🌙 Dark mode</button>'+
+    '</div>'+
+    '<hr>'+
+    '<h3>Dữ liệu</h3>'+
+    '<p class="muted">Toàn bộ tiến độ (flashcards, từ đã nhớ, lịch sử luyện tập, lịch sử test, lỗi sai) được lưu trong <strong>localStorage</strong> của trình duyệt. App không cần internet hay tài khoản.</p>'+
+    '<div class="btn-row">'+
+      '<button class="btn bad" onclick="confirmReset()">🗑 Reset Progress</button>'+
+    '</div>'+
+    '<hr>'+
+    '<h3>Thông tin bộ đề</h3>'+
+    '<p class="muted">48 từ vựng · 176 câu hỏi<br>'+
+    'Part A: 42 · Part B: 48 · Part C: 20 · Part D: 46 · Part E: 20</p>'+
+  '</div>';
+}
+function setTheme(t){
+  store.theme = t;
+  save();
+  document.documentElement.setAttribute("data-theme", t==="dark"?"dark":"light");
+  render();
+}
+function confirmReset(){
+  if(confirm("Are you sure you want to reset all progress?\n\n(Toàn bộ tiến độ học tập sẽ bị xoá. Ngân hàng câu hỏi vẫn được giữ nguyên.)")){
+    const theme = store.theme;
+    store = defaultStore();
+    store.theme = theme;
+    save();
+    session = null;
+    alert("Đã reset toàn bộ tiến độ học tập.");
+    go("dashboard");
+  }
+}
+
+/* =========================================================
+   18. INIT
+   ========================================================= */
+document.documentElement.setAttribute("data-theme", store.theme==="dark"?"dark":"light");
+render();
+</script>
+</body>
+</html>
